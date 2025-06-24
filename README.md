@@ -22,12 +22,10 @@ Answering Questions:
 -Use the Next button to move to the next question.
 -On the last question, click Submit to finish the quiz.
 
-
 Viewing Results:
 
 -After submitting, you’ll see your total score, the number of correct answers, and explanations for each question.
 -Use the Retake Quiz button to try again with a new question order.
-
 
 Feature Descriptions:
 
