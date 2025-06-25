@@ -72,7 +72,7 @@ const questions = [
       "//",
       "/*",
       "#",
-      "<!-- -->"
+      ""
     ],
     answer: 2,
     explanation: "The # symbol is used for single-line comments in Python."
@@ -109,12 +109,10 @@ const questions = [
     ],
     answer: 1,
     explanation: "Compilation converts human-readable code into machine code."
-}];
+  }
+];
 
 // Shuffle questions for each quiz attempt
-let shuffledQuestions, currentQuestion, score, userAnswers;
-
-// Fisher-Yates shuffle: Randomly shuffles the elements of an array in place
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -122,10 +120,12 @@ function shuffle(array) {
   }
 }
 
-// DOM Elements and Navigation setup inside DOMContentLoaded
+let shuffledQuestions, currentQuestion, score, userAnswers;
+
 document.addEventListener('DOMContentLoaded', function () {
-  const startBtn = document.getElementById('quiz-btn');
+  // DOM Elements
   const howtoBtn = document.getElementById('howto-btn');
+  const quizBtn = document.getElementById('quiz-btn');
   const howtoSection = document.getElementById('howto-section');
   const quizSection = document.getElementById('quiz-section');
   const resultSection = document.getElementById('result-section');
@@ -137,68 +137,53 @@ document.addEventListener('DOMContentLoaded', function () {
   const explanationsList = document.getElementById('explanations-list');
   const retryBtn = document.getElementById('retry-btn');
 
-  // Make these variables accessible to other functions
-  window.quizElements = {
-    startBtn,
-    howtoBtn,
-    howtoSection,
-    quizSection,
-    resultSection,
-    questionText,
-    optionsList,
-    nextBtn,
-    submitBtn,
-  scoreText,
-  explanationsList,
-  retryBtn
-};
+  // Navigation
+  if (howtoBtn) howtoBtn.onclick = () => {
+    howtoSection.style.display = '';
+    quizSection.style.display = 'none';
+    resultSection.style.display = 'none';
+  };
+  if (quizBtn) quizBtn.onclick = startQuiz;
+  if (retryBtn) retryBtn.onclick = startQuiz;
+  if (nextBtn) nextBtn.onclick = handleNextQuestion;
+  if (submitBtn) submitBtn.onclick = handleSubmit;
 
-// Start Quiz
-function startQuiz() {
-  const { howtoSection, quizSection, resultSection } = window.quizElements;
-  howtoSection.style.display = 'none';
-  quizSection.style.display = '';
-  resultSection.style.display = 'none';
-  shuffledQuestions = [...questions];
-  shuffle(shuffledQuestions);
-  currentQuestion = 0;
-  score = 0;
-  userAnswers = [];
-  showQuestion();
-}
-// Show Question
-function showQuestion() {
-  const { questionText, optionsList, nextBtn, submitBtn } = window.quizElements;
-  const q = shuffledQuestions[currentQuestion];
-  questionText.textContent = `Q${currentQuestion + 1}: ${q.question}`;
-  optionsList.innerHTML = '';
-  q.options.forEach((opt, idx) => {
-    const li = document.createElement('li');
-    const btn = document.createElement('button');
-    btn.textContent = opt;
-    btn.onclick = () => selectAnswer(idx);
-    btn.setAttribute('aria-label', opt);
-    // If already answered, mark and disable
-    if (typeof userAnswers[currentQuestion] !== 'undefined') {
-      btn.disabled = true;
-      if (idx === userAnswers[currentQuestion]) btn.classList.add('selected');
-      if (idx === q.answer) btn.classList.add('correct');
-      else if (idx === userAnswers[currentQuestion] && idx !== q.answer) btn.classList.add('incorrect');
-    }
-    li.appendChild(btn);
-    optionsList.appendChild(li);
-  });
+  // Start Quiz
+  function startQuiz() {
+    howtoSection.style.display = 'none';
+    quizSection.style.display = '';
+    resultSection.style.display = 'none';
+    shuffledQuestions = [...questions];
+    shuffle(shuffledQuestions);
+    currentQuestion = 0;
+    score = 0;
+    userAnswers = [];
+    showQuestion();
+  }
 
-  // Enable/disable navigation buttons based on answer state
-  const answered = typeof userAnswers[currentQuestion] !== 'undefined';
-  nextBtn.disabled = !answered;
-  nextBtn.style.display = currentQuestion < shuffledQuestions.length - 1 ? '' : 'none';
-  submitBtn.style.display = currentQuestion === shuffledQuestions.length - 1 ? '' : 'none';
-  submitBtn.disabled = !answered;
-}
-  function markOptionsAfterSelection(selectedIdx) {
-    const { optionsList } = window.quizElements;
+  // Show Question
+  function showQuestion() {
     const q = shuffledQuestions[currentQuestion];
+    questionText.textContent = `Q${currentQuestion + 1}: ${q.question}`;
+    optionsList.innerHTML = '';
+    q.options.forEach((opt, idx) => {
+      const li = document.createElement('li');
+      const btn = document.createElement('button');
+      btn.textContent = opt;
+      btn.onclick = () => selectAnswer(idx);
+      btn.setAttribute('aria-label', opt);
+      li.appendChild(btn);
+      optionsList.appendChild(li);
+    });
+    nextBtn.disabled = true;
+    nextBtn.style.display = currentQuestion < shuffledQuestions.length - 1 ? '' : 'none';
+    submitBtn.style.display = currentQuestion === shuffledQuestions.length - 1 ? '' : 'none';
+  }
+
+  // Select Answer
+  function selectAnswer(selectedIdx) {
+    const q = shuffledQuestions[currentQuestion];
+    userAnswers[currentQuestion] = selectedIdx;
     const optionButtons = optionsList.querySelectorAll('button');
     optionButtons.forEach((b, idx) => {
       b.classList.remove('selected', 'correct', 'incorrect');
@@ -207,51 +192,45 @@ function showQuestion() {
       else if (idx === selectedIdx && idx !== q.answer) b.classList.add('incorrect');
       b.disabled = true;
     });
-  }
-
-  function selectAnswer(selectedIdx) {
-    const { nextBtn, submitBtn } = window.quizElements;
-    // Remove previous score for this question before updating answer
-    if (typeof userAnswers[currentQuestion] !== 'undefined') {
-      const prevAnswer = userAnswers[currentQuestion];
-      const q = shuffledQuestions[currentQuestion];
-      if (prevAnswer === q.answer) score--;
-    }
-    userAnswers[currentQuestion] = selectedIdx;
-    if (selectedIdx === shuffledQuestions[currentQuestion].answer) score++;
-    markOptionsAfterSelection(selectedIdx);
-
+    if (selectedIdx === q.answer) score++;
     nextBtn.disabled = false;
-    if (currentQuestion === shuffledQuestions.length - 1) {
-      submitBtn.disabled = false;
-    }
+    submitBtn.disabled = false;
   }
 
+  // Next or Submit
   function handleNextQuestion() {
+    // Prevent going to next question if no answer is selected
+    if (typeof userAnswers[currentQuestion] === 'undefined') {
+      alert('Please select an answer before proceeding.');
+      return;
+    }
     currentQuestion++;
-    showQuestion();
+    if (currentQuestion < shuffledQuestions.length) {
+      showQuestion();
+    }
   }
 
   function handleSubmit() {
+    // Prevent submitting if last question is unanswered
+    if (typeof userAnswers[currentQuestion] === 'undefined') {
+      alert('Please select an answer before submitting.');
+      return;
+    }
     showResults();
   }
 
-  function isValidUserAnswer(idx, q) {
-    return typeof userAnswers[idx] === 'number' && userAnswers[idx] >= 0 && userAnswers[idx] < q.options.length;
-  }
-
+  // Show Results
   function showResults() {
-    const { quizSection, resultSection, scoreText, explanationsList } = window.quizElements;
     quizSection.style.display = 'none';
     resultSection.style.display = '';
     scoreText.textContent = `You scored ${score} out of ${shuffledQuestions.length}.`;
     explanationsList.innerHTML = '';
-
     shuffledQuestions.forEach((q, idx) => {
       const li = document.createElement('li');
-      let userAnswerText = isValidUserAnswer(idx, q)
-        ? q.options[userAnswers[idx]]
-        : 'No answer';
+      let userAnswerText =
+        typeof userAnswers[idx] === 'number' && userAnswers[idx] >= 0 && userAnswers[idx] < q.options.length
+          ? q.options[userAnswers[idx]]
+          : 'No answer';
       li.innerHTML = `<strong>Q${idx + 1}:</strong> ${q.question}<br>
         <strong>Your answer:</strong> ${userAnswerText}<br>
         <strong>Correct answer:</strong> ${q.options[q.answer]}<br>
@@ -259,19 +238,4 @@ function showQuestion() {
       explanationsList.appendChild(li);
     });
   }
-
-  // Event listeners
-  startBtn.onclick = startQuiz;
-  howtoBtn.onclick = function () {
-    howtoSection.style.display = '';
-    quizSection.style.display = 'none';
-    resultSection.style.display = 'none';
-  };
-  nextBtn.onclick = handleNextQuestion;
-  submitBtn.onclick = handleSubmit;
-  retryBtn.onclick = startQuiz;
-
-  // Show how-to section on load
-  howtoSection.style.display = '';
-  quizSection.style.display = 'none';
-resultSection.style.display = 'none';})
+});
