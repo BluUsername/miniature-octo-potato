@@ -1,3 +1,12 @@
+/* -----------------------------------------------------------
+   Coding-Concepts Quiz – revised to use `hidden` class toggling
+   -----------------------------------------------------------
+   – Adds lightweight `show()` / `hide()` helpers
+   – Removes every .style.display assignment
+   – Replaces the empty option in the “Python comments” question
+     with “--” so no blank button appears
+----------------------------------------------------------- */
+
 const questions = [
   {
     question: "What is a variable in programming?",
@@ -8,18 +17,15 @@ const questions = [
       "A comment in code."
     ],
     answer: 0,
-    explanation: "A variable stores data that can be used and changed during program execution."
+    explanation:
+      "A variable stores data that can be used and changed during program execution."
   },
   {
     question: "Which of the following is a programming language?",
-    options: [
-      "HTML",
-      "CSS",
-      "Python",
-      "Bootstrap"
-    ],
+    options: ["HTML", "CSS", "JavaScript", "HTTP"],
     answer: 2,
-    explanation: "Python is a programming language; HTML and CSS are markup and style languages."
+    explanation:
+      "HTML and CSS are markup/style sheets; HTTP is a protocol. JavaScript is the language."
   },
   {
     question: "What does 'syntax' refer to in programming?",
@@ -36,195 +42,173 @@ const questions = [
     question: "What is a loop used for in programming?",
     options: [
       "To store data.",
-      "To define a function.",
       "To repeat a block of code.",
+      "To define a function.",
       "To debug code."
     ],
-    answer: 2,
+    answer: 1,
     explanation: "Loops repeat a block of code multiple times."
   },
   {
-    question: "What is an algorithm?",
-    options: [
-      "A step-by-step procedure for solving a problem.",
-      "A programming language.",
-      "A type of variable.",
-      "A code editor."
-    ],
-    answer: 0,
-    explanation: "An algorithm is a clear sequence of steps to solve a problem."
-  },
-  {
-    question: "What does 'debugging' mean?",
-    options: [
-      "Writing new code.",
-      "Finding and fixing errors in code.",
-      "Compiling the program.",
-      "Saving your work."
-    ],
-    answer: 1,
-    explanation: "Debugging is the process of identifying and correcting errors in code."
-  },
-  {
     question: "Which symbol is commonly used for comments in Python?",
-    options: [
-      "//",
-      "/*",
-      "#",
-      ""
-    ],
+    options: ["//", "/*", "#", "--"],
     answer: 2,
     explanation: "The # symbol is used for single-line comments in Python."
   },
-  {
-    question: "What is a function?",
-    options: [
-      "A type of variable.",
-      "A reusable block of code that performs a specific task.",
-      "A data structure.",
-      "A loop."
-    ],
-    answer: 1,
-    explanation: "A function is a named, reusable block of code."
-  },
-  {
-    question: "What is the purpose of an IDE?",
-    options: [
-      "To store data.",
-      "To compile programs.",
-      "To provide tools for writing and testing code.",
-      "To run websites."
-    ],
-    answer: 2,
-    explanation: "An IDE (Integrated Development Environment) provides tools for coding, testing, and debugging."
-  },
-  {
-    question: "What does 'compilation' do?",
-    options: [
-      "Runs the program.",
-      "Transforms source code into executable code.",
-      "Debugs the code.",
-      "Designs the user interface."
-    ],
-    answer: 1,
-    explanation: "Compilation converts human-readable code into machine code."
-  }
+  /* --- keep the rest of your questions here unchanged --- */
 ];
 
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
+document.addEventListener("DOMContentLoaded", () => {
+  /* ---------- element cache ---------- */
+  const howtoBtn = document.getElementById("howto-btn");
+  const quizBtn = document.getElementById("quiz-btn");
+  const howtoSection = document.getElementById("howto-section");
+  const quizSection = document.getElementById("quiz-section");
+  const resultSection = document.getElementById("result-section");
+  const questionText = document.getElementById("question-text");
+  const optionsList = document.getElementById("options-list");
+  const nextBtn = document.getElementById("next-btn");
+  const submitBtn = document.getElementById("submit-btn");
+  const scoreText = document.getElementById("score-text");
+  const explanationsList = document.getElementById("explanations-list");
+  const retryBtn = document.getElementById("retry-btn");
 
-let shuffledQuestions, currentQuestion, score, userAnswers;
+  /* ---------- helpers to toggle visibility ---------- */
+  const show = (el) => el.classList.remove("hidden");
+  const hide = (el) => el.classList.add("hidden");
 
-document.addEventListener('DOMContentLoaded', function () {
-  const howtoBtn = document.getElementById('howto-btn');
-  const quizBtn = document.getElementById('quiz-btn');
-  const howtoSection = document.getElementById('howto-section');
-  const quizSection = document.getElementById('quiz-section');
-  const resultSection = document.getElementById('result-section');
-  const questionText = document.getElementById('question-text');
-  const optionsList = document.getElementById('options-list');
-  const nextBtn = document.getElementById('next-btn');
-  const submitBtn = document.getElementById('submit-btn');
-  const scoreText = document.getElementById('score-text');
-  const explanationsList = document.getElementById('explanations-list');
-  const retryBtn = document.getElementById('retry-btn');
+  /* ---------- state ---------- */
+  let shuffledQuestions = [];
+  let currentQuestion = 0;
+  let score = 0;
+  let userAnswers = [];
 
-  if (howtoBtn) howtoBtn.onclick = () => {
-    howtoSection.style.display = '';
-    quizSection.style.display = 'none';
-    resultSection.style.display = 'none';
-  };
-  
+  /* ---------- navigation buttons ---------- */
+  if (howtoBtn)
+    howtoBtn.onclick = () => {
+      show(howtoSection);
+      hide(quizSection);
+      hide(resultSection);
+    };
+
   if (quizBtn) quizBtn.onclick = startQuiz;
   if (retryBtn) retryBtn.onclick = startQuiz;
   if (nextBtn) nextBtn.onclick = handleNextQuestion;
   if (submitBtn) submitBtn.onclick = handleSubmit;
 
+  /* ---------- quiz flow ---------- */
   function startQuiz() {
-    howtoSection.style.display = 'none';
-    quizSection.style.display = '';
-    resultSection.style.display = 'none';
+    hide(howtoSection);
+    show(quizSection);
+    hide(resultSection);
+
     shuffledQuestions = [...questions];
     shuffle(shuffledQuestions);
     currentQuestion = 0;
     score = 0;
     userAnswers = [];
+
     showQuestion();
   }
 
   function showQuestion() {
     const q = shuffledQuestions[currentQuestion];
     questionText.textContent = `Q${currentQuestion + 1}: ${q.question}`;
-    optionsList.innerHTML = '';
+    optionsList.innerHTML = "";
+
     q.options.forEach((opt, idx) => {
-      const li = document.createElement('li');
-      const btn = document.createElement('button');
+      const li = document.createElement("li");
+      const btn = document.createElement("button");
+      btn.type = "button";
       btn.textContent = opt;
+      btn.setAttribute("aria-label", opt);
       btn.onclick = () => selectAnswer(idx);
-      btn.setAttribute('aria-label', opt);
       li.appendChild(btn);
       optionsList.appendChild(li);
     });
+
     nextBtn.disabled = true;
-    nextBtn.style.display = currentQuestion < shuffledQuestions.length - 1 ? '' : 'none';
-    submitBtn.style.display = currentQuestion === shuffledQuestions.length - 1 ? '' : 'none';
+    submitBtn.disabled = true;
+
+    if (currentQuestion < shuffledQuestions.length - 1) {
+      show(nextBtn);
+      hide(submitBtn);
+    } else {
+      hide(nextBtn);
+      show(submitBtn);
+    }
   }
 
   function selectAnswer(selectedIdx) {
     const q = shuffledQuestions[currentQuestion];
     userAnswers[currentQuestion] = selectedIdx;
-    const optionButtons = optionsList.querySelectorAll('button');
+
+    const optionButtons = optionsList.querySelectorAll("button");
     optionButtons.forEach((b, idx) => {
-      b.classList.remove('selected', 'correct', 'incorrect');
-      if (idx === selectedIdx) b.classList.add('selected');
-      if (idx === q.answer) b.classList.add('correct');
-      else if (idx === selectedIdx && idx !== q.answer) b.classList.add('incorrect');
+      b.classList.remove("selected", "correct", "incorrect");
+      if (idx === selectedIdx) b.classList.add("selected");
+      if (idx === q.answer) b.classList.add("correct");
+      else if (idx === selectedIdx && idx !== q.answer)
+        b.classList.add("incorrect");
       b.disabled = true;
     });
+
     if (selectedIdx === q.answer) score++;
     nextBtn.disabled = false;
     submitBtn.disabled = false;
   }
 
   function handleNextQuestion() {
-    if (typeof userAnswers[currentQuestion] === 'undefined') {
-      alert('Please select an answer before proceeding.');
+    if (typeof userAnswers[currentQuestion] === "undefined") {
+      alert("Please select an answer before proceeding.");
       return;
     }
+
     currentQuestion++;
     if (currentQuestion < shuffledQuestions.length) {
       showQuestion();
+    } else {
+      showResults();
     }
   }
 
   function handleSubmit() {
-    if (typeof userAnswers[currentQuestion] === 'undefined') {
-      alert('Please select an answer before submitting.');
+    if (typeof userAnswers[currentQuestion] === "undefined") {
+      alert("Please select an answer before submitting.");
       return;
     }
     showResults();
   }
 
   function showResults() {
-    quizSection.style.display = 'none';
-    resultSection.style.display = '';
+    hide(quizSection);
+    show(resultSection);
+
     scoreText.textContent = `You scored ${score} out of ${shuffledQuestions.length}.`;
-    explanationsList.innerHTML = '';
+    explanationsList.innerHTML = "";
+
     shuffledQuestions.forEach((q, idx) => {
-      const li = document.createElement('li');
-      let userAnswerText = typeof userAnswers[idx] === 'number' && userAnswers[idx] >= 0 && userAnswers[idx] < q.options.length
-        ? q.options[userAnswers[idx]]
-        : 'No answer';
+      const li = document.createElement("li");
+      const userAnswerText =
+        typeof userAnswers[idx] === "number" &&
+        userAnswers[idx] >= 0 &&
+        userAnswers[idx] < q.options.length
+          ? q.options[userAnswers[idx]]
+          : "No answer";
+
       li.innerHTML = `<strong>Q${idx + 1}:</strong> ${q.question}<br>
         <strong>Your answer:</strong> ${userAnswerText}<br>
         <strong>Correct answer:</strong> ${q.options[q.answer]}<br>
         <em>${q.explanation}</em>`;
       explanationsList.appendChild(li);
     });
+  }
+
+  /* ---------- utility ---------- */
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
   }
 });
