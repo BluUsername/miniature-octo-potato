@@ -1,10 +1,8 @@
 /* -----------------------------------------------------------
-   Coding-Concepts Quiz – revised to use `hidden` class toggling
-   -----------------------------------------------------------
-   – Adds lightweight `show()` / `hide()` helpers
-   – Removes every .style.display assignment
-   – Replaces the empty option in the “Python comments” question
-     with “--” so no blank button appears
+   Coding-Concepts Quiz – clean version (25 Jun 2025)
+   – Uses .hidden class for visibility
+   – No inline style.display battles
+   – Syntax-error free
 ----------------------------------------------------------- */
 
 const questions = [
@@ -51,164 +49,112 @@ const questions = [
   },
   {
     question: "Which symbol is commonly used for comments in Python?",
-    options: ["//", "/*", "#", "--"],
+    options: ["//", "/*", "#", "--"],   // <-- no more blank entry
     answer: 2,
     explanation: "The # symbol is used for single-line comments in Python."
-  },
-  /* --- keep the rest of your questions here unchanged --- */
+  }
+  // …add the rest of your questions here …
 ];
+
+/* ---------- tiny helper ---------- */
+const $ = (id) => document.getElementById(id);
 
 document.addEventListener("DOMContentLoaded", () => {
   /* ---------- element cache ---------- */
-  const howtoBtn = document.getElementById("howto-btn");
-  const quizBtn = document.getElementById("quiz-btn");
-  const howtoSection = document.getElementById("howto-section");
-  const quizSection = document.getElementById("quiz-section");
-  const resultSection = document.getElementById("result-section");
-  const questionText = document.getElementById("question-text");
-  const optionsList = document.getElementById("options-list");
-  const nextBtn = document.getElementById("next-btn");
-  const submitBtn = document.getElementById("submit-btn");
-  const scoreText = document.getElementById("score-text");
-  const explanationsList = document.getElementById("explanations-list");
-  const retryBtn = document.getElementById("retry-btn");
+  const howtoBtn       = $("howto-btn");
+  const quizBtn        = $("quiz-btn");
+  const howtoSection   = $("howto-section");
+  const quizSection    = $("quiz-section");
+  const resultSection  = $("result-section");
+  const questionText   = $("question-text");
+  const optionsList    = $("options-list");
+  const nextBtn        = $("next-btn");
+  const submitBtn      = $("submit-btn");
+  const scoreText      = $("score-text");
+  const explanations   = $("explanations-list");
+  const retryBtn       = $("retry-btn");
 
-  /* ---------- helpers to toggle visibility ---------- */
+  /* ---------- visibility helpers ---------- */
   const show = (el) => el.classList.remove("hidden");
   const hide = (el) => el.classList.add("hidden");
 
   /* ---------- state ---------- */
-  let shuffledQuestions = [];
-  let currentQuestion = 0;
-  let score = 0;
-  let userAnswers = [];
+  let shuffled = [], current = 0, score = 0, userAns = [];
 
-  /* ---------- navigation buttons ---------- */
-  if (howtoBtn)
-    howtoBtn.onclick = () => {
-      show(howtoSection);
-      hide(quizSection);
-      hide(resultSection);
-    };
+  /* ---------- navigation ---------- */
+  howtoBtn?.addEventListener("click", () => {
+    show(howtoSection); hide(quizSection); hide(resultSection);
+  });
+  quizBtn?.addEventListener("click", startQuiz);
+  retryBtn?.addEventListener("click", startQuiz);
+  nextBtn?.addEventListener("click", () => advance(false));
+  submitBtn?.addEventListener("click", () => advance(true));
 
-  if (quizBtn) quizBtn.onclick = startQuiz;
-  if (retryBtn) retryBtn.onclick = startQuiz;
-  if (nextBtn) nextBtn.onclick = handleNextQuestion;
-  if (submitBtn) submitBtn.onclick = handleSubmit;
-
-  /* ---------- quiz flow ---------- */
+  /* ---------- functions ---------- */
   function startQuiz() {
-    hide(howtoSection);
-    show(quizSection);
-    hide(resultSection);
-
-    shuffledQuestions = [...questions];
-    shuffle(shuffledQuestions);
-    currentQuestion = 0;
-    score = 0;
-    userAnswers = [];
-
-    showQuestion();
+    hide(howtoSection); show(quizSection); hide(resultSection);
+    shuffled = [...questions].sort(() => Math.random() - 0.5);
+    current  = 0;
+    score    = 0;
+    userAns  = [];
+    renderQ();
   }
 
-  function showQuestion() {
-    const q = shuffledQuestions[currentQuestion];
-    questionText.textContent = `Q${currentQuestion + 1}: ${q.question}`;
+  function renderQ() {
+    const q = shuffled[current];
+    questionText.textContent = `Q${current + 1}: ${q.question}`;
     optionsList.innerHTML = "";
 
-    q.options.forEach((opt, idx) => {
-      const li = document.createElement("li");
+    q.options.forEach((opt, i) => {
+      const li  = document.createElement("li");
       const btn = document.createElement("button");
       btn.type = "button";
       btn.textContent = opt;
-      btn.setAttribute("aria-label", opt);
-      btn.onclick = () => selectAnswer(idx);
+      btn.addEventListener("click", () => pick(i));
       li.appendChild(btn);
       optionsList.appendChild(li);
     });
 
     nextBtn.disabled = true;
     submitBtn.disabled = true;
-
-    if (currentQuestion < shuffledQuestions.length - 1) {
-      show(nextBtn);
-      hide(submitBtn);
-    } else {
-      hide(nextBtn);
-      show(submitBtn);
-    }
+    show(current < shuffled.length - 1 ? nextBtn : submitBtn);
+    hide(current < shuffled.length - 1 ? submitBtn : nextBtn);
   }
 
-  function selectAnswer(selectedIdx) {
-    const q = shuffledQuestions[currentQuestion];
-    userAnswers[currentQuestion] = selectedIdx;
-
-    const optionButtons = optionsList.querySelectorAll("button");
-    optionButtons.forEach((b, idx) => {
-      b.classList.remove("selected", "correct", "incorrect");
-      if (idx === selectedIdx) b.classList.add("selected");
-      if (idx === q.answer) b.classList.add("correct");
-      else if (idx === selectedIdx && idx !== q.answer)
-        b.classList.add("incorrect");
+  function pick(i) {
+    const q = shuffled[current];
+    userAns[current] = i;
+    [...optionsList.children].forEach((li, idx) => {
+      const b = li.firstElementChild;
+      b.classList.toggle("selected",  idx === i);
+      b.classList.toggle("correct",   idx === q.answer);
+      b.classList.toggle("incorrect", idx === i && idx !== q.answer);
       b.disabled = true;
     });
-
-    if (selectedIdx === q.answer) score++;
-    nextBtn.disabled = false;
-    submitBtn.disabled = false;
+    if (i === q.answer) score++;
+    nextBtn.disabled = submitBtn.disabled = false;
   }
 
-  function handleNextQuestion() {
-    if (typeof userAnswers[currentQuestion] === "undefined") {
-      alert("Please select an answer before proceeding.");
-      return;
-    }
+  function advance(isSubmit) {
+    if (typeof userAns[current] === "undefined")
+      return alert("Please choose an answer first.");
 
-    currentQuestion++;
-    if (currentQuestion < shuffledQuestions.length) {
-      showQuestion();
-    } else {
-      showResults();
-    }
-  }
-
-  function handleSubmit() {
-    if (typeof userAnswers[currentQuestion] === "undefined") {
-      alert("Please select an answer before submitting.");
-      return;
-    }
-    showResults();
+    if (isSubmit || current === shuffled.length - 1) { showResults(); return; }
+    current++; renderQ();
   }
 
   function showResults() {
-    hide(quizSection);
-    show(resultSection);
-
-    scoreText.textContent = `You scored ${score} out of ${shuffledQuestions.length}.`;
-    explanationsList.innerHTML = "";
-
-    shuffledQuestions.forEach((q, idx) => {
+    hide(quizSection); show(resultSection);
+    scoreText.textContent = `You scored ${score} / ${shuffled.length}`;
+    explanations.innerHTML = "";
+    shuffled.forEach((q, i) => {
       const li = document.createElement("li");
-      const userAnswerText =
-        typeof userAnswers[idx] === "number" &&
-        userAnswers[idx] >= 0 &&
-        userAnswers[idx] < q.options.length
-          ? q.options[userAnswers[idx]]
-          : "No answer";
-
-      li.innerHTML = `<strong>Q${idx + 1}:</strong> ${q.question}<br>
-        <strong>Your answer:</strong> ${userAnswerText}<br>
-        <strong>Correct answer:</strong> ${q.options[q.answer]}<br>
-        <em>${q.explanation}</em>`;
-      explanationsList.appendChild(li);
+      li.innerHTML =
+        `<strong>Q${i + 1}</strong> ${q.question}<br>
+         Your answer: ${q.options[userAns[i] ?? "-"]}<br>
+         Correct answer: ${q.options[q.answer]}<br>
+         <em>${q.explanation}</em>`;
+      explanations.appendChild(li);
     });
-  }
-
-  /* ---------- utility ---------- */
-  function shuffle(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
   }
 });
