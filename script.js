@@ -123,6 +123,7 @@ function shuffle(array) {
 }
 
 // DOM Elements
+const startBtn = document.getElementById('quiz-btn');
 const howtoBtn = document.getElementById('howto-btn');
 const quizBtn = document.getElementById('quiz-btn');
 const howtoSection = document.getElementById('howto-section');
