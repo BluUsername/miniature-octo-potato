@@ -1,4 +1,3 @@
-// Coding Quiz Questions
 const questions = [
   {
     question: "What is a variable in programming?",
@@ -112,11 +111,16 @@ const questions = [
   }
 ];
 
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
 
 let shuffledQuestions, currentQuestion, score, userAnswers;
 
 document.addEventListener('DOMContentLoaded', function () {
-  // DOM Elements
   const howtoBtn = document.getElementById('howto-btn');
   const quizBtn = document.getElementById('quiz-btn');
   const howtoSection = document.getElementById('howto-section');
@@ -130,18 +134,17 @@ document.addEventListener('DOMContentLoaded', function () {
   const explanationsList = document.getElementById('explanations-list');
   const retryBtn = document.getElementById('retry-btn');
 
-  // Navigation
   if (howtoBtn) howtoBtn.onclick = () => {
     howtoSection.style.display = '';
     quizSection.style.display = 'none';
     resultSection.style.display = 'none';
   };
+  
   if (quizBtn) quizBtn.onclick = startQuiz;
   if (retryBtn) retryBtn.onclick = startQuiz;
   if (nextBtn) nextBtn.onclick = handleNextQuestion;
   if (submitBtn) submitBtn.onclick = handleSubmit;
 
-  // Start Quiz
   function startQuiz() {
     howtoSection.style.display = 'none';
     quizSection.style.display = '';
@@ -154,7 +157,6 @@ document.addEventListener('DOMContentLoaded', function () {
     showQuestion();
   }
 
-  // Show Question
   function showQuestion() {
     const q = shuffledQuestions[currentQuestion];
     questionText.textContent = `Q${currentQuestion + 1}: ${q.question}`;
@@ -173,7 +175,6 @@ document.addEventListener('DOMContentLoaded', function () {
     submitBtn.style.display = currentQuestion === shuffledQuestions.length - 1 ? '' : 'none';
   }
 
-  // Select Answer
   function selectAnswer(selectedIdx) {
     const q = shuffledQuestions[currentQuestion];
     userAnswers[currentQuestion] = selectedIdx;
@@ -190,7 +191,6 @@ document.addEventListener('DOMContentLoaded', function () {
     submitBtn.disabled = false;
   }
 
-  // Next or Submit
   function handleNextQuestion() {
     if (typeof userAnswers[currentQuestion] === 'undefined') {
       alert('Please select an answer before proceeding.');
@@ -210,7 +210,6 @@ document.addEventListener('DOMContentLoaded', function () {
     showResults();
   }
 
-  // Show Results
   function showResults() {
     quizSection.style.display = 'none';
     resultSection.style.display = '';
@@ -218,10 +217,9 @@ document.addEventListener('DOMContentLoaded', function () {
     explanationsList.innerHTML = '';
     shuffledQuestions.forEach((q, idx) => {
       const li = document.createElement('li');
-      let userAnswerText =
-        typeof userAnswers[idx] === 'number' && userAnswers[idx] >= 0 && userAnswers[idx] < q.options.length
-          ? q.options[userAnswers[idx]]
-          : 'No answer';
+      let userAnswerText = typeof userAnswers[idx] === 'number' && userAnswers[idx] >= 0 && userAnswers[idx] < q.options.length
+        ? q.options[userAnswers[idx]]
+        : 'No answer';
       li.innerHTML = `<strong>Q${idx + 1}:</strong> ${q.question}<br>
         <strong>Your answer:</strong> ${userAnswerText}<br>
         <strong>Correct answer:</strong> ${q.options[q.answer]}<br>
