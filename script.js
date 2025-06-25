@@ -122,34 +122,40 @@ function shuffle(array) {
   }
 }
 
-// DOM Elements
-const startBtn = document.getElementById('quiz-btn');
-const howtoBtn = document.getElementById('howto-btn');
-const quizBtn = document.getElementById('quiz-btn');
-const howtoSection = document.getElementById('howto-section');
-const quizSection = document.getElementById('quiz-section');
-const resultSection = document.getElementById('result-section');
-const questionText = document.getElementById('question-text');
-const optionsList = document.getElementById('options-list');
-const nextBtn = document.getElementById('next-btn');
-const submitBtn = document.getElementById('submit-btn');
-const scoreText = document.getElementById('score-text');
-const explanationsList = document.getElementById('explanations-list');
-const retryBtn = document.getElementById('retry-btn');
+// DOM Elements and Navigation setup inside DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function () {
+  const startBtn = document.getElementById('quiz-btn');
+  const howtoBtn = document.getElementById('howto-btn');
+  const howtoSection = document.getElementById('howto-section');
+  const quizSection = document.getElementById('quiz-section');
+  const resultSection = document.getElementById('result-section');
+  const questionText = document.getElementById('question-text');
+  const optionsList = document.getElementById('options-list');
+  const nextBtn = document.getElementById('next-btn');
+  const submitBtn = document.getElementById('submit-btn');
+  const scoreText = document.getElementById('score-text');
+  const explanationsList = document.getElementById('explanations-list');
+  const retryBtn = document.getElementById('retry-btn');
 
-// Navigation
-if (howtoBtn && howtoSection && quizSection && resultSection) {
-  howtoBtn.onclick = () => {
-    howtoSection.style.display = '';
-    quizSection.style.display = 'none';
-    resultSection.style.display = 'none';
-}
-if (quizBtn) quizBtn.onclick = startQuiz;
-if (retryBtn) retryBtn.onclick = startQuiz;
-if (nextBtn) nextBtn.onclick = handleNextQuestion;
+  // Make these variables accessible to other functions
+  window.quizElements = {
+    startBtn,
+    howtoBtn,
+    howtoSection,
+    quizSection,
+    resultSection,
+    questionText,
+    optionsList,
+    nextBtn,
+    submitBtn,
+  scoreText,
+  explanationsList,
+  retryBtn
+};
 
 // Start Quiz
 function startQuiz() {
+  const { howtoSection, quizSection, resultSection } = window.quizElements;
   howtoSection.style.display = 'none';
   quizSection.style.display = '';
   resultSection.style.display = 'none';
@@ -160,9 +166,9 @@ function startQuiz() {
   userAnswers = [];
   showQuestion();
 }
-
 // Show Question
 function showQuestion() {
+  const { questionText, optionsList, nextBtn, submitBtn } = window.quizElements;
   const q = shuffledQuestions[currentQuestion];
   questionText.textContent = `Q${currentQuestion + 1}: ${q.question}`;
   optionsList.innerHTML = '';
@@ -172,89 +178,100 @@ function showQuestion() {
     btn.textContent = opt;
     btn.onclick = () => selectAnswer(idx);
     btn.setAttribute('aria-label', opt);
+    // If already answered, mark and disable
+    if (typeof userAnswers[currentQuestion] !== 'undefined') {
+      btn.disabled = true;
+      if (idx === userAnswers[currentQuestion]) btn.classList.add('selected');
+      if (idx === q.answer) btn.classList.add('correct');
+      else if (idx === userAnswers[currentQuestion] && idx !== q.answer) btn.classList.add('incorrect');
+    }
     li.appendChild(btn);
     optionsList.appendChild(li);
   });
-  nextBtn.disabled = true;
+
+  // Enable/disable navigation buttons based on answer state
+  const answered = typeof userAnswers[currentQuestion] !== 'undefined';
+  nextBtn.disabled = !answered;
   nextBtn.style.display = currentQuestion < shuffledQuestions.length - 1 ? '' : 'none';
   submitBtn.style.display = currentQuestion === shuffledQuestions.length - 1 ? '' : 'none';
+  submitBtn.disabled = !answered;
 }
-
-// Select Answer
-function updateScoreAndAnswers(selectedIdx) {
-  const q = shuffledQuestions[currentQuestion];
-  if (typeof userAnswers[currentQuestion] !== 'undefined') {
-    if (userAnswers[currentQuestion] === q.answer) score--;
+  function markOptionsAfterSelection(selectedIdx) {
+    const { optionsList } = window.quizElements;
+    const q = shuffledQuestions[currentQuestion];
+    const optionButtons = optionsList.querySelectorAll('button');
+    optionButtons.forEach((b, idx) => {
+      b.classList.remove('selected', 'correct', 'incorrect');
+      if (idx === selectedIdx) b.classList.add('selected');
+      if (idx === q.answer) b.classList.add('correct');
+      else if (idx === selectedIdx && idx !== q.answer) b.classList.add('incorrect');
+      b.disabled = true;
+    });
   }
-  userAnswers[currentQuestion] = selectedIdx;
-  userAnswers[currentQuestion] = selectedIdx;
-  if (selectedIdx === q.answer) score++;
-}
-function markOptionsAfterSelection(selectedIdx) {
-  const q = shuffledQuestions[currentQuestion];
-  const optionButtons = optionsList.querySelectorAll('button');
-  optionButtons.forEach((b, idx) => {
-    b.classList.remove('selected', 'correct', 'incorrect');
-    if (idx === selectedIdx) b.classList.add('selected');
-    if (idx === q.answer) b.classList.add('correct');
-    else if (idx === selectedIdx && idx !== q.answer) b.classList.add('incorrect');
-    b.disabled = true;
-  });
-}
 
-function selectAnswer(selectedIdx) {
-  updateScoreAndAnswers(selectedIdx);
-  markOptionsAfterSelection(selectedIdx);
+  function selectAnswer(selectedIdx) {
+    const { nextBtn, submitBtn } = window.quizElements;
+    // Remove previous score for this question before updating answer
+    if (typeof userAnswers[currentQuestion] !== 'undefined') {
+      const prevAnswer = userAnswers[currentQuestion];
+      const q = shuffledQuestions[currentQuestion];
+      if (prevAnswer === q.answer) score--;
+    }
+    userAnswers[currentQuestion] = selectedIdx;
+    if (selectedIdx === shuffledQuestions[currentQuestion].answer) score++;
+    markOptionsAfterSelection(selectedIdx);
 
-  nextBtn.disabled = false;
-  if (currentQuestion === shuffledQuestions.length - 1) {
-    submitBtn.disabled = false;
+    nextBtn.disabled = false;
+    if (currentQuestion === shuffledQuestions.length - 1) {
+      submitBtn.disabled = false;
+    }
   }
-}
-// Next or Submit
-function handleNextQuestion() {
-  // Prevent going to next question if no answer is selected
-  if (typeof userAnswers[currentQuestion] === 'undefined') {
-    alert('Please select an answer before proceeding.');
-    return;
-  }
-  currentQuestion++;
-  if (currentQuestion < shuffledQuestions.length) {
+
+  function handleNextQuestion() {
+    currentQuestion++;
     showQuestion();
   }
-}
-function handleSubmit() {
-  // Prevent submitting if last question is unanswered
-  if (typeof userAnswers[currentQuestion] === 'undefined') {
-    alert('Please select an answer before submitting.');
-    return;
+
+  function handleSubmit() {
+    showResults();
   }
-  showResults();
-}
-submitBtn.onclick = handleSubmit;
-};
-// Helper function to check if user answer is valid
-function isValidUserAnswer(idx, q) {
-  return typeof userAnswers[idx] === 'number' && userAnswers[idx] >= 0 && userAnswers[idx] < q.options.length;
-}
 
-// Show Results
-function showResults() {
+  function isValidUserAnswer(idx, q) {
+    return typeof userAnswers[idx] === 'number' && userAnswers[idx] >= 0 && userAnswers[idx] < q.options.length;
+  }
+
+  function showResults() {
+    const { quizSection, resultSection, scoreText, explanationsList } = window.quizElements;
+    quizSection.style.display = 'none';
+    resultSection.style.display = '';
+    scoreText.textContent = `You scored ${score} out of ${shuffledQuestions.length}.`;
+    explanationsList.innerHTML = '';
+
+    shuffledQuestions.forEach((q, idx) => {
+      const li = document.createElement('li');
+      let userAnswerText = isValidUserAnswer(idx, q)
+        ? q.options[userAnswers[idx]]
+        : 'No answer';
+      li.innerHTML = `<strong>Q${idx + 1}:</strong> ${q.question}<br>
+        <strong>Your answer:</strong> ${userAnswerText}<br>
+        <strong>Correct answer:</strong> ${q.options[q.answer]}<br>
+        <em>${q.explanation}</em>`;
+      explanationsList.appendChild(li);
+    });
+  }
+
+  // Event listeners
+  startBtn.onclick = startQuiz;
+  howtoBtn.onclick = function () {
+    howtoSection.style.display = '';
+    quizSection.style.display = 'none';
+    resultSection.style.display = 'none';
+  };
+  nextBtn.onclick = handleNextQuestion;
+  submitBtn.onclick = handleSubmit;
+  retryBtn.onclick = startQuiz;
+
+  // Show how-to section on load
+  howtoSection.style.display = '';
   quizSection.style.display = 'none';
-  resultSection.style.display = '';
-  scoreText.textContent = `You scored ${score} out of ${shuffledQuestions.length}.`;
-  explanationsList.innerHTML = '';
-
-  shuffledQuestions.forEach((q, idx) => {
-    const li = document.createElement('li');
-    let userAnswerText = isValidUserAnswer(idx, q)
-      ? q.options[userAnswers[idx]]
-      : 'No answer';
-    li.innerHTML = `<strong>Q${idx + 1}:</strong> ${q.question}<br>
-      <strong>Your answer:</strong> ${userAnswerText}<br>
-      <strong>Correct answer:</strong> ${q.options[q.answer]}<br>
-      <em>${q.explanation}</em>`;
-    explanationsList.appendChild(li);
-  });
-}
-
+resultSection.style.display = 'none';})
