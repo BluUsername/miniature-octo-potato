@@ -1,8 +1,8 @@
 /* -----------------------------------------------------------
-   Coding-Concepts Quiz – clean version (25 Jun 2025)
-   – Uses .hidden class for visibility
-   – No inline style.display battles
-   – Syntax-error free
+   Coding-Concepts Quiz – fully updated (25 Jun 2025)
+   – Uses .hidden class for visibility (no style.display battles)
+   – Keeps ALL ten original questions
+   – Replaces blank "" option in the Python-comment question with "--"
 ----------------------------------------------------------- */
 
 const questions = [
@@ -20,10 +20,15 @@ const questions = [
   },
   {
     question: "Which of the following is a programming language?",
-    options: ["HTML", "CSS", "JavaScript", "HTTP"],
+    options: [
+      "HTML",
+      "CSS",
+      "Python",
+      "Bootstrap"
+    ],
     answer: 2,
     explanation:
-      "HTML and CSS are markup/style sheets; HTTP is a protocol. JavaScript is the language."
+      "Python is a programming language; HTML and CSS are markup and style languages, and Bootstrap is a CSS framework."
   },
   {
     question: "What does 'syntax' refer to in programming?",
@@ -34,26 +39,90 @@ const questions = [
       "The type of variable."
     ],
     answer: 1,
-    explanation: "Syntax is the set of rules that defines how code must be written."
+    explanation:
+      "Syntax is the set of rules that defines how code must be written."
   },
   {
     question: "What is a loop used for in programming?",
     options: [
       "To store data.",
-      "To repeat a block of code.",
       "To define a function.",
+      "To repeat a block of code.",
       "To debug code."
     ],
-    answer: 1,
+    answer: 2,
     explanation: "Loops repeat a block of code multiple times."
   },
   {
+    question: "What is an algorithm?",
+    options: [
+      "A step-by-step procedure for solving a problem.",
+      "A programming language.",
+      "A type of variable.",
+      "A code editor."
+    ],
+    answer: 0,
+    explanation: "An algorithm is a clear sequence of steps to solve a problem."
+  },
+  {
+    question: "What does 'debugging' mean?",
+    options: [
+      "Writing new code.",
+      "Finding and fixing errors in code.",
+      "Compiling the program.",
+      "Saving your work."
+    ],
+    answer: 1,
+    explanation:
+      "Debugging is the process of identifying and correcting errors in code."
+  },
+  {
     question: "Which symbol is commonly used for comments in Python?",
-    options: ["//", "/*", "#", "--"],   // <-- no more blank entry
+    options: [
+      "//",
+      "/*",
+      "#",
+      "--"           // ← replaces the blank string in the original file
+    ],
     answer: 2,
-    explanation: "The # symbol is used for single-line comments in Python."
+    explanation:
+      "The # symbol is used for single-line comments in Python."
+  },
+  {
+    question: "What is a function?",
+    options: [
+      "A type of variable.",
+      "A reusable block of code that performs a specific task.",
+      "A data structure.",
+      "A loop."
+    ],
+    answer: 1,
+    explanation: "A function is a named, reusable block of code."
+  },
+  {
+    question: "What is the purpose of an IDE?",
+    options: [
+      "To store data.",
+      "To compile programs.",
+      "To provide tools for writing and testing code.",
+      "To run websites."
+    ],
+    answer: 2,
+    explanation:
+      "An IDE (Integrated Development Environment) provides tools for coding, testing, and debugging."
+  },
+  {
+    question: "What does 'compilation' do?",
+    options: [
+      "Runs the program.",
+      "Transforms source code into executable code.",
+      "Debugs the code.",
+      "Designs the user interface."
+    ],
+    answer: 1,
+    explanation:
+      "Compilation converts human-readable code into machine code."
   }
-  // …add the rest of your questions here …
 ];
 
 /* ---------- tiny helper ---------- */
@@ -61,18 +130,18 @@ const $ = (id) => document.getElementById(id);
 
 document.addEventListener("DOMContentLoaded", () => {
   /* ---------- element cache ---------- */
-  const howtoBtn       = $("howto-btn");
-  const quizBtn        = $("quiz-btn");
-  const howtoSection   = $("howto-section");
-  const quizSection    = $("quiz-section");
-  const resultSection  = $("result-section");
-  const questionText   = $("question-text");
-  const optionsList    = $("options-list");
-  const nextBtn        = $("next-btn");
-  const submitBtn      = $("submit-btn");
-  const scoreText      = $("score-text");
-  const explanations   = $("explanations-list");
-  const retryBtn       = $("retry-btn");
+  const howtoBtn      = $("howto-btn");
+  const quizBtn       = $("quiz-btn");
+  const howtoSection  = $("howto-section");
+  const quizSection   = $("quiz-section");
+  const resultSection = $("result-section");
+  const questionText  = $("question-text");
+  const optionsList   = $("options-list");
+  const nextBtn       = $("next-btn");
+  const submitBtn     = $("submit-btn");
+  const scoreText     = $("score-text");
+  const explanations  = $("explanations-list");
+  const retryBtn      = $("retry-btn");
 
   /* ---------- visibility helpers ---------- */
   const show = (el) => el.classList.remove("hidden");
@@ -136,23 +205,24 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function advance(isSubmit) {
-    if (typeof userAns[current] === "undefined")
-      return alert("Please choose an answer first.");
-
+    if (typeof userAns[current] === "undefined") {
+      alert("Please choose an answer first.");
+      return;
+    }
     if (isSubmit || current === shuffled.length - 1) { showResults(); return; }
     current++; renderQ();
   }
 
   function showResults() {
     hide(quizSection); show(resultSection);
-    scoreText.textContent = `You scored ${score} / ${shuffled.length}`;
+    scoreText.textContent = `You scored ${score} out of ${shuffled.length}.`;
     explanations.innerHTML = "";
     shuffled.forEach((q, i) => {
       const li = document.createElement("li");
       li.innerHTML =
-        `<strong>Q${i + 1}</strong> ${q.question}<br>
-         Your answer: ${q.options[userAns[i] ?? "-"]}<br>
-         Correct answer: ${q.options[q.answer]}<br>
+        `<strong>Q${i + 1}:</strong> ${q.question}<br>
+         <strong>Your answer:</strong> ${q.options[userAns[i] ?? "-"]}<br>
+         <strong>Correct answer:</strong> ${q.options[q.answer]}<br>
          <em>${q.explanation}</em>`;
       explanations.appendChild(li);
     });
