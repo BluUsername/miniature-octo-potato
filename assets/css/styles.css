@@ -3,8 +3,8 @@
 ---------------------------- */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f3f4f6; /* soft gray */
-  color: #1f2937;             /* dark slate */
+  background-color: #f5f3ff; /* soft lavender */
+  color: #1e1b4b;             /* dark indigo */
   margin: 0;
   padding: 0;
   line-height: 1.6;
@@ -12,7 +12,7 @@ body {
 
 h1, h2 {
   text-align: center;
-  color: #111827; /* near-black */
+  color: #1e1b4b;
 }
 
 .container {
@@ -28,7 +28,7 @@ h1, h2 {
    Navigation / Section Buttons
 ---------------------------- */
 button {
-  background-color: #3b82f6; /* soft blue */
+  background-color: #6366f1; /* soft indigo */
   color: white;
   border: none;
   padding: 0.7rem 1.2rem;
@@ -39,11 +39,11 @@ button {
 }
 
 button:hover {
-  background-color: #2563eb; /* darker blue */
+  background-color: #4f46e5; /* deeper indigo */
 }
 
 button:disabled {
-  background-color: #9ca3af; /* neutral gray */
+  background-color: #a78bfa; /* muted purple */
   cursor: not-allowed;
 }
 
@@ -64,23 +64,23 @@ button:disabled {
   display: block;
   width: 100%;
   text-align: left;
-  background-color: #e5e7eb; /* light gray */
-  color: #111827;
+  background-color: #ede9fe; /* light lavender */
+  color: #1e1b4b;
   padding: 0.8rem 1rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid #c4b5fd;
   font-size: 1rem;
   border-radius: 6px;
   transition: background-color 0.2s ease;
 }
 
 #options-list button:hover {
-  background-color: #dbeafe; /* subtle blue hover */
+  background-color: #ddd6fe; /* hover indigo tint */
 }
 
 #options-list button.selected {
-  background-color: #93c5fd; /* blue tint */
-  border-color: #3b82f6;
-  color: #1e40af; /* dark blue */
+  background-color: #c7d2fe; /* stronger lavender */
+  border-color: #6366f1;
+  color: #312e81; /* deep indigo */
 }
 
 #options-list button.correct {
@@ -116,8 +116,8 @@ button:disabled {
 }
 
 #explanations-list li {
-  background-color: #f9fafb;
-  border-left: 4px solid #3b82f6;
+  background-color: #f9f5ff;
+  border-left: 4px solid #6366f1;
   padding: 1rem;
   margin-bottom: 1rem;
   border-radius: 6px;
