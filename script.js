@@ -199,7 +199,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Next or Submit
   function handleNextQuestion() {
-    // Prevent going to next question if no answer is selected
     if (typeof userAnswers[currentQuestion] === 'undefined') {
       alert('Please select an answer before proceeding.');
       return;
@@ -211,7 +210,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function handleSubmit() {
-    // Prevent submitting if last question is unanswered
     if (typeof userAnswers[currentQuestion] === 'undefined') {
       alert('Please select an answer before submitting.');
       return;
