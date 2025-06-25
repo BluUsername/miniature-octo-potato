@@ -112,12 +112,15 @@ const questions = [
 }];
 
 // Shuffle questions for each quiz attempt
+let shuffledQuestions, currentQuestion, score, userAnswers;
+
+// Fisher-Yates shuffle: Randomly shuffles the elements of an array in place
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
-
-let shuffledQuestions, currentQuestion, score, userAnswers;
+  }
+}
 
 // DOM Elements
 const howtoBtn = document.getElementById('howto-btn');
@@ -183,10 +186,9 @@ function updateScoreAndAnswers(selectedIdx) {
     if (userAnswers[currentQuestion] === q.answer) score--;
   }
   userAnswers[currentQuestion] = selectedIdx;
+  userAnswers[currentQuestion] = selectedIdx;
   if (selectedIdx === q.answer) score++;
 }
-}
-
 function markOptionsAfterSelection(selectedIdx) {
   const q = shuffledQuestions[currentQuestion];
   const optionButtons = optionsList.querySelectorAll('button');
@@ -253,6 +255,5 @@ function showResults() {
       <em>${q.explanation}</em>`;
     explanationsList.appendChild(li);
   });
-}
 }
 
