@@ -83,7 +83,6 @@ const questions = [
     explanation: "JavaScript adds interactivity and behavior to web pages."
   }
 ];
-
 let currentQuestionIndex = 0;
 let score = 0;
 let userAnswers = Array(questions.length).fill(null);
@@ -95,20 +94,22 @@ const homepageSection = document.getElementById("homepage-section");
 const howtoSection = document.getElementById("howto-section");
 const quizSection = document.getElementById("quiz-section");
 const resultSection = document.getElementById("result-section");
-
+const heroSection = document.getElementById("hero-section");
 const navBar = document.getElementById("nav-bar");
-const startBtn = document.getElementById("start-btn");
+
 const howtoBtn = document.getElementById("howto-btn");
 const howtoQuizBtn = document.getElementById("howto-quiz-btn");
+const startBtn = document.getElementById("start-btn");
+
 const questionText = document.getElementById("question-text");
 const optionsList = document.getElementById("options-list");
+const progressText = document.getElementById("progress-text");
 const nextBtn = document.getElementById("next-btn");
 const submitBtn = document.getElementById("submit-btn");
 const retryBtn = document.getElementById("retry-btn");
 const backBtn = document.getElementById("back-btn");
 const scoreText = document.getElementById("score-text");
 const explanationsList = document.getElementById("explanations-list");
-const progressText = document.getElementById("progress-text");
 
 // =========================
 // Progress Bar Functions
@@ -123,7 +124,7 @@ function updateProgressBar() {
 // Navigation Functions
 // =========================
 function showSection(section) {
-  [homepageSection, howtoSection, quizSection, resultSection].forEach(s => s.classList.add("hidden"));
+  [homepageSection, howtoSection, quizSection, resultSection, heroSection].forEach(sec => sec.classList.add("hidden"));
   section.classList.remove("hidden");
 
   if (section === quizSection) {
@@ -174,20 +175,17 @@ function selectOption(index) {
 }
 
 function showResults() {
-  score = userAnswers.reduce((acc, ans, i) => acc + (ans === questions[i].answer ? 1 : 0), 0);
+  score = userAnswers.reduce((acc, answer, i) => acc + (answer === questions[i].answer ? 1 : 0), 0);
   scoreText.textContent = `You scored ${score} out of ${questions.length}.`;
   explanationsList.innerHTML = "";
 
   questions.forEach((q, i) => {
-    const userChoice = q.options[userAnswers[i]] || "No answer selected";
-    const correctChoice = q.options[q.answer];
-
     const li = document.createElement("li");
     li.innerHTML = `
-      <p><strong>Q${i + 1}: ${q.question}</strong></p>
-      <p><strong>Your Answer:</strong> ${userChoice}</p>
-      <p><strong>Correct Answer:</strong> ${correctChoice}</p>
-      <p><em>${q.explanation}</em></p>
+      <p><strong>Q${i + 1}:</strong> ${q.question}</p>
+      <p><strong>Your answer:</strong> ${q.options[userAnswers[i]] ?? "No answer selected"}</p>
+      <p><strong>Correct answer:</strong> ${q.options[q.answer]}</p>
+      <p>${q.explanation}</p>
     `;
     explanationsList.appendChild(li);
   });
@@ -199,8 +197,8 @@ function showResults() {
 // Event Listeners
 // =========================
 howtoBtn.addEventListener("click", () => showSection(howtoSection));
-startBtn.addEventListener("click", startQuiz);
 howtoQuizBtn.addEventListener("click", startQuiz);
+startBtn.addEventListener("click", startQuiz);
 
 nextBtn.addEventListener("click", () => {
   if (currentQuestionIndex < questions.length - 1) {
@@ -217,7 +215,4 @@ backBtn.addEventListener("click", () => {
 });
 
 submitBtn.addEventListener("click", showResults);
-retryBtn.addEventListener("click", () => showSection(document.getElementById("hero-section")));
-
-// Initialize
-showSection(document.getElementById("hero-section"));
+retryBtn.addEventListener("click", () => showSection(heroSection));
