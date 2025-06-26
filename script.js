@@ -95,12 +95,16 @@ const homepageSection = document.getElementById("homepage-section");
 const howtoSection = document.getElementById("howto-section");
 const quizSection = document.getElementById("quiz-section");
 const resultSection = document.getElementById("result-section");
+const heroSection = document.getElementById("hero-section");
 
 const howtoBtn = document.getElementById("howto-btn");
 const quizBtn = document.getElementById("quiz-btn");
 const howtoQuizBtn = document.getElementById("howto-quiz-btn");
+const startBtn = document.getElementById("start-btn");
+
 const questionText = document.getElementById("question-text");
 const optionsList = document.getElementById("options-list");
+const progressText = document.getElementById("progress-text");
 const nextBtn = document.getElementById("next-btn");
 const submitBtn = document.getElementById("submit-btn");
 const retryBtn = document.getElementById("retry-btn");
@@ -112,8 +116,9 @@ const explanationsList = document.getElementById("explanations-list");
 // Progress Bar Functions
 // =========================
 function updateProgressBar() {
-    const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-    document.getElementById("progress-bar").style.width = progress + "%";
+  const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+  document.getElementById("progress-bar").style.width = progress + "%";
+  progressText.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
 }
 
 // =========================
@@ -124,6 +129,7 @@ function showSection(section) {
   howtoSection.classList.add("hidden");
   quizSection.classList.add("hidden");
   resultSection.classList.add("hidden");
+  heroSection.classList.add("hidden");
   section.classList.remove("hidden");
 }
 
@@ -159,7 +165,6 @@ function displayQuestion() {
   nextBtn.classList.toggle("hidden", currentQuestionIndex >= questions.length - 1);
   submitBtn.classList.toggle("hidden", currentQuestionIndex < questions.length - 1);
 
-  // Update progress bar
   updateProgressBar();
 }
 
@@ -175,17 +180,11 @@ function showResults() {
 
   questions.forEach((q, i) => {
     const li = document.createElement("li");
-
-    // Get the user's selected answer and the correct answer
-    const selectedAnswer = questions[i].options[userAnswers[i]];
-    const correctAnswer = questions[i].options[q.answer];
-
-    // Add question, selected answer, correct answer, and explanation
     li.innerHTML = `
-      <strong>Q${i + 1}: ${q.question}</strong><br>
-      <strong>Your answer:</strong> ${selectedAnswer}<br>
-      <strong>Correct answer:</strong> ${correctAnswer}<br>
-      <em>Explanation: ${q.explanation}</em>
+      <p><strong>Q${i + 1}:</strong> ${q.question}</p>
+      <p><strong>Your answer:</strong> ${q.options[userAnswers[i]] ?? "No answer selected"}</p>
+      <p><strong>Correct answer:</strong> ${q.options[q.answer]}</p>
+      <p>${q.explanation}</p>
     `;
     explanationsList.appendChild(li);
   });
@@ -199,6 +198,7 @@ function showResults() {
 howtoBtn.addEventListener("click", () => showSection(howtoSection));
 quizBtn.addEventListener("click", startQuiz);
 howtoQuizBtn.addEventListener("click", startQuiz);
+startBtn.addEventListener("click", startQuiz);
 
 nextBtn.addEventListener("click", () => {
   if (currentQuestionIndex < questions.length - 1) {
@@ -215,4 +215,4 @@ backBtn.addEventListener("click", () => {
 });
 
 submitBtn.addEventListener("click", showResults);
-retryBtn.addEventListener("click", () => showSection(homepageSection));
+retryBtn.addEventListener("click", () => showSection(heroSection));
