@@ -1,167 +1,225 @@
+/* ===================================================================
+   Styles (styles.css)
+   Custom responsive, accessible quiz UI with validated layout
+   =================================================================== */
+
+:root {
+  --primary: #4f46e5;
+  --secondary: #ede9fe;
+  --accent: #bbf7d0;
+  --text: #1e1b4b;
+  --error: #fecaca;
+}
+
 /* ----------------------------
    Global Styles
-   ---------------------------- */
-
+----------------------------- */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f3ff; /* soft lavender */
-    color: #1e1b4b; /* dark indigo */
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--secondary);
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
 }
 
 h1, h2 {
-    text-align: center;
-    color: #1e1b4b;
+  text-align: center;
+  color: var(--text);
 }
 
 .container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+img[alt] {
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
 }
 
 /* ----------------------------
-   Navigation / Section Buttons
-   ---------------------------- */
-
+   Buttons & Navigation
+----------------------------- */
 button {
-    background-color: #6366f1; /* soft indigo */
-    color: white;
-    border: none;
-    padding: 0.7rem 1.2rem;
-    font-size: 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.25s ease;
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 0.9rem 1.4rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.1s ease;
 }
 
-button:hover {
-    background-color: #4f46e5; /* deeper indigo */
+button:hover,
+button:focus-visible {
+  background-color: #4338ca;
+  outline: 2px solid #a5b4fc;
+  outline-offset: 2px;
 }
 
 button:disabled {
-    background-color: #a78bfa; /* muted purple */
-    cursor: not-allowed;
+  background-color: #a78bfa;
+  cursor: not-allowed;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.nav-active {
+  background-color: #312e81;
 }
 
 /* ----------------------------
-   Question + Options
-   ---------------------------- */
-
+   Quiz Options Styling
+----------------------------- */
 #options-list {
-    list-style-type: none;
-    padding: 0;
-    margin-top: 1.5rem;
+  list-style-type: none;
+  padding: 0;
+  margin-top: 1.5rem;
 }
 
 #options-list li {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 #options-list button {
-    display: block;
-    width: 100%;
-    text-align: left;
-    background-color: #ede9fe; /* light lavender */
-    color: #1e1b4b;
-    padding: 0.8rem 1rem;
-    border: 1px solid #c4b5fd;
-    font-size: 1rem;
-    border-radius: 6px;
-    transition: background-color 0.2s ease;
+  display: block;
+  width: 100%;
+  text-align: left;
+  background-color: var(--secondary);
+  color: var(--text);
+  padding: 1rem 1.2rem;
+  border: 1px solid #c4b5fd;
+  font-size: 1rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
 }
 
 #options-list button:hover {
-    background-color: #ddd6fe; /* hover indigo tint */
+  background-color: #ddd6fe;
 }
 
 #options-list button.selected {
-    background-color: #c7d2fe; /* stronger lavender */
-    border-color: #6366f1;
-    color: #312e81; /* deep indigo */
+  background-color: #c7d2fe;
+  border-color: var(--primary);
+  color: #312e81;
 }
 
 #options-list button.correct {
-    background-color: #bbf7d0; /* soft green */
-    border-color: #22c55e;
-    color: #065f46;
+  background-color: var(--accent);
+  border-color: #22c55e;
+  color: #065f46;
+  animation: pulseGreen 0.5s ease;
 }
 
 #options-list button.incorrect {
-    background-color: #fecaca; /* soft red */
-    border-color: #ef4444;
-    color: #7f1d1d;
+  background-color: var(--error);
+  border-color: #ef4444;
+  color: #7f1d1d;
+  animation: pulseRed 0.5s ease;
+}
+
+@keyframes pulseGreen {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pulseRed {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
 }
 
 /* ----------------------------
-   Sections
-   ---------------------------- */
-
+   Utility & Sections
+----------------------------- */
 .hidden {
-    display: none !important;
+  display: none !important;
 }
-
-#score-text {
-    font-weight: bold;
-    font-size: 1.2rem;
-    text-align: center;
-    margin: 1rem 0;
-}
-
-#explanations-list {
-    list-style-type: none;
-    padding: 0;
-    margin-top: 1.5rem;
-}
-
-#explanations-list li {
-    background-color: #f9f5ff;
-    border-left: 4px solid #6366f1;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 6px;
-}
-
-/* ----------------------------
-   Utility
-   ---------------------------- */
 
 .center {
-    text-align: center;
-    margin: 2rem 0;
+  text-align: center;
+  margin: 2rem 0;
 }
 
 .center button {
-    margin: 0 15px;
-    display: inline-block;
+  margin: 0.5rem;
+  display: inline-block;
 }
 
 .mt-2 {
-    margin-top: 2rem;
+  margin-top: 2rem;
+}
+
+#score-text {
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+#explanations-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 1.5rem;
+}
+
+#explanations-list li {
+  background-color: #f9f5ff;
+  border-left: 4px solid var(--primary);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
 }
 
 /* ----------------------------
-   Centering Improvements
-   ---------------------------- */
-
-/* Center how-to instructions */
+   How-to page
+----------------------------- */
 #howto-section {
-    text-align: center;
+  text-align: center;
 }
 
 #howto-section ol {
-    display: inline-block;
-    text-align: left;
-    margin: 1rem auto;
-    padding-left: 20px;
+  display: inline-block;
+  text-align: left;
+  margin: 1rem auto;
+  padding-left: 20px;
 }
 
 #howto-section li {
-    margin-bottom: 8px;
-    line-height: 1.5;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+/* ----------------------------
+   Media Queries
+----------------------------- */
+@media (max-width: 40rem) {
+  .center button {
+    display: block;
+    width: 100%;
+    margin: 0.5rem auto;
+  }
+  .container {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 25rem) {
+  body {
+    font-size: 0.95rem;
+  }
+  button {
+    font-size: 0.95rem;
+    padding: 0.8rem 1rem;
+  }
 }
