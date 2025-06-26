@@ -27,7 +27,7 @@ const questions = [
   },
   {
     question: "Which symbol is used for comments in JavaScript?",
-    options: ["<!-- -->", "//", "/* */", "#"],
+    options: ["<!-- -->", "//", "--", "#"],
     answer: 1,
     explanation: "JavaScript uses // for single-line comments and /* */ for multi-line comments."
   },
