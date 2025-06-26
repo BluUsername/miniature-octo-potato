@@ -175,7 +175,18 @@ function showResults() {
 
   questions.forEach((q, i) => {
     const li = document.createElement("li");
-    li.innerHTML = `<strong>Q${i + 1}:</strong> ${q.explanation}`;
+
+    // Get the user's selected answer and the correct answer
+    const selectedAnswer = questions[i].options[userAnswers[i]];
+    const correctAnswer = questions[i].options[q.answer];
+
+    // Add question, selected answer, correct answer, and explanation
+    li.innerHTML = `
+      <strong>Q${i + 1}: ${q.question}</strong><br>
+      <strong>Your answer:</strong> ${selectedAnswer}<br>
+      <strong>Correct answer:</strong> ${correctAnswer}<br>
+      <em>Explanation: ${q.explanation}</em>
+    `;
     explanationsList.appendChild(li);
   });
 
@@ -205,4 +216,3 @@ backBtn.addEventListener("click", () => {
 
 submitBtn.addEventListener("click", showResults);
 retryBtn.addEventListener("click", () => showSection(homepageSection));
-
