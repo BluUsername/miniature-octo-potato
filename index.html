@@ -6,11 +6,19 @@
   <meta name="description" content="A fun and accessible coding concepts quiz.">
   <title>Coding Concepts Quiz</title>
   <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    .small-logo {
+      max-width: 60px;
+    }
+  </style>
 </head>
 <body>
+  <div id="progress-bar-container">
+    <div id="progress-bar"></div>
+</div>
   <div class="container">
     <header>
-      <img src="assets/images/logo.png" alt="Coding Concepts Quiz Logo" class="logo" />
+      <img src="assets/images/logo.png" alt="Coding Concepts Quiz Logo" class="logo small-logo" />
       <h1>Coding Concepts Quiz</h1>
     </header>
 
@@ -32,6 +40,7 @@
           <li>Click "Quiz" to start.</li>
           <li>Each question has multiple choices. Click your answer.</li>
           <li>Click "Next" to move to the next question.</li>
+          <li>You can go back using the "Back" button to change an answer.</li>
           <li>At the end, you'll see your score and explanations.</li>
         </ol>
         <div class="center">
