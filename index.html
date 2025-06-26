@@ -1,55 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A fun and accessible coding concepts quiz.">
   <title>Coding Concepts Quiz</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>Coding Concepts Quiz</h1>
-    <img src="assets/img/quiz-logo.png" alt="Coding Concepts Quiz Logo" width="100" height="100" />
+    <header>
+      <img src="assets/images/logo.png" alt="Quiz Logo" class="logo" />
+      <h1>Coding Concepts Quiz</h1>
+    </header>
 
-    <!-- Homepage Section -->
-    <div id="homepage-section">
-      <div class="center">
-        <button id="howto-btn">How to</button>
-        <button id="quiz-btn">Quiz</button>
-      </div>
-    </div>
+    <nav class="center">
+      <button id="howto-btn" aria-label="How to use the quiz">How to</button>
+      <button id="quiz-btn" aria-label="Start the quiz">Quiz</button>
+    </nav>
 
-    <!-- How-to Section -->
-    <div id="howto-section" class="hidden">
-      <h2>How to Use This Quiz</h2>
-      <ol>
-        <li>Click "Quiz" to start.</li>
-        <li>Each question has multiple choices. Click your answer.</li>
-        <li>Click "Next" to move to the next question.</li>
-        <li>At the end, you'll see your score and explanations.</li>
-      </ol>
-    </div>
+    <main>
+      <section id="homepage-section">
+        <div class="center">
+          <p>Welcome! Select an option to get started.</p>
+        </div>
+      </section>
 
-    <!-- Quiz Section -->
-    <div id="quiz-section" class="hidden">
-      <h2 id="question-text"></h2>
-      <ul id="options-list"></ul>
-      <div class="center mt-2">
-        <button id="next-btn" class="hidden">Next</button>
-        <button id="submit-btn" class="hidden">Submit</button>
-      </div>
-    </div>
+      <section id="howto-section" class="hidden" aria-labelledby="howto-btn">
+        <h2>How to Use This Quiz</h2>
+        <ol>
+          <li>Click "Quiz" to start.</li>
+          <li>Each question has multiple choices. Click your answer.</li>
+          <li>Click "Next" to move to the next question.</li>
+          <li>At the end, you'll see your score and explanations.</li>
+        </ol>
+      </section>
 
-    <!-- Results Section -->
-    <div id="result-section" class="hidden">
-      <h2>Quiz Results</h2>
-      <p id="score-text"></p>
-      <ul id="explanations-list"></ul>
-      <div class="center">
-        <button id="retry-btn">Retake Quiz</button>
-      </div>
-    </div>
+      <section id="quiz-section" class="hidden" aria-labelledby="quiz-btn">
+        <h2 id="question-text"></h2>
+        <ul id="options-list"></ul>
+        <div class="center mt-2">
+          <button id="next-btn" class="hidden" aria-label="Next question">Next</button>
+          <button id="submit-btn" class="hidden" aria-label="Submit quiz">Submit</button>
+        </div>
+      </section>
+
+      <section id="result-section" class="hidden">
+        <h2>Quiz Results</h2>
+        <p id="score-text"></p>
+        <ul id="explanations-list"></ul>
+        <div class="center">
+          <button id="retry-btn" aria-label="Retake the quiz">Retake Quiz</button>
+        </div>
+      </section>
+    </main>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
