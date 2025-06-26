@@ -128,7 +128,7 @@ button:disabled {
 }
 
 /* ----------------------------
-   Utility Classes
+   Utility
    ---------------------------- */
 
 .center {
@@ -138,7 +138,6 @@ button:disabled {
 
 .center button {
     margin: 0 15px;
-    display: inline-block;
 }
 
 .mt-2 {
@@ -165,4 +164,3 @@ button:disabled {
     margin-bottom: 8px;
     line-height: 1.5;
 }
-
