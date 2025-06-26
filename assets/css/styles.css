@@ -128,7 +128,7 @@ button:disabled {
 }
 
 /* ----------------------------
-   Utility
+   Utility Classes
    ---------------------------- */
 
 .center {
@@ -138,6 +138,7 @@ button:disabled {
 
 .center button {
     margin: 0 15px;
+    display: inline-block;
 }
 
 .mt-2 {
@@ -158,9 +159,22 @@ button:disabled {
     text-align: left;
     margin: 1rem auto;
     padding-left: 20px;
+    max-width: 400px;
 }
 
 #howto-section li {
     margin-bottom: 8px;
     line-height: 1.5;
+}
+
+/* Ensure homepage buttons are properly centered */
+#homepage-section .center {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+#homepage-section .center button {
+    margin: 0 20px;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
 }
