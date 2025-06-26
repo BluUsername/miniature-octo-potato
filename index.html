@@ -10,7 +10,7 @@
 <body>
   <div class="container">
     <header>
-      <img src="assets/images/logo.png" alt="Quiz Logo" class="logo" />
+      <img src="assets/images/logo.png" alt="Coding Concepts Quiz Logo" class="logo" />
       <h1>Coding Concepts Quiz</h1>
     </header>
 
@@ -34,12 +34,16 @@
           <li>Click "Next" to move to the next question.</li>
           <li>At the end, you'll see your score and explanations.</li>
         </ol>
+        <div class="center">
+          <button id="howto-quiz-btn" aria-label="Start the quiz from how-to page">Start Quiz</button>
+        </div>
       </section>
 
       <section id="quiz-section" class="hidden" aria-labelledby="quiz-btn">
         <h2 id="question-text"></h2>
         <ul id="options-list"></ul>
         <div class="center mt-2">
+          <button id="back-btn" class="hidden" aria-label="Go back to previous question">Back</button>
           <button id="next-btn" class="hidden" aria-label="Next question">Next</button>
           <button id="submit-btn" class="hidden" aria-label="Submit quiz">Submit</button>
         </div>

@@ -1,67 +1,78 @@
-/* ===================================================================
-   Styles (styles.css)
-   Custom responsive, accessible quiz UI with validated layout
-   =================================================================== */
-
+/* =====================
+   Global Colour Scheme
+   ===================== */
 :root {
-  --primary: #4f46e5;
-  --secondary: #ede9fe;
-  --accent: #bbf7d0;
-  --text: #1e1b4b;
+  --primary: #6366f1;         /* soft indigo */
+  --primary-dark: #4f46e5;    /* deeper indigo */
+  --background: #f5f3ff;      /* soft lavender */
+  --text: #1e1b4b;            /* dark indigo */
+  --white: #ffffff;
+  --success: #bbf7d0;
   --error: #fecaca;
 }
 
-/* ----------------------------
-   Global Styles
------------------------------ */
+/* =============
+   Base Styles
+   ============= */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--secondary);
+  background-color: var(--background);
   color: var(--text);
   margin: 0;
   padding: 0;
   line-height: 1.6;
 }
 
-h1, h2 {
-  text-align: center;
-  color: var(--text);
-}
-
 .container {
   max-width: 800px;
   margin: 2rem auto;
   padding: 2rem;
-  background: #fff;
+  background: var(--white);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-img[alt] {
-  max-width: 100%;
-  display: block;
-  margin: 0 auto;
+header {
+  text-align: center;
 }
 
-/* ----------------------------
-   Buttons & Navigation
------------------------------ */
+.logo {
+  max-width: 100px;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+h1, h2 {
+  color: var(--text);
+  text-align: center;
+}
+
+/* ===============
+   Navigation
+   =============== */
+nav.center button {
+  margin: 0 15px;
+  display: inline-block;
+}
+
 button {
   background-color: var(--primary);
-  color: #fff;
+  color: white;
   border: none;
-  padding: 0.9rem 1.4rem;
+  padding: 0.9rem 1.5rem;
   font-size: 1rem;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.25s ease, transform 0.1s ease;
+  transition: background-color 0.25s ease, transform 0.2s;
 }
 
-button:hover,
+button:hover {
+  background-color: var(--primary-dark);
+}
+
 button:focus-visible {
-  background-color: #4338ca;
-  outline: 2px solid #a5b4fc;
-  outline-offset: 2px;
+  outline: 3px solid var(--primary-dark);
+  outline-offset: 3px;
 }
 
 button:disabled {
@@ -69,17 +80,13 @@ button:disabled {
   cursor: not-allowed;
 }
 
-button:active {
-  transform: scale(0.98);
+button.nav-active {
+  box-shadow: 0 0 0 2px var(--primary-dark);
 }
 
-.nav-active {
-  background-color: #312e81;
-}
-
-/* ----------------------------
-   Quiz Options Styling
------------------------------ */
+/* ==============
+   Quiz Styles
+   ============== */
 #options-list {
   list-style-type: none;
   padding: 0;
@@ -94,13 +101,13 @@ button:active {
   display: block;
   width: 100%;
   text-align: left;
-  background-color: var(--secondary);
+  background-color: #ede9fe;
   color: var(--text);
-  padding: 1rem 1.2rem;
+  padding: 1rem;
   border: 1px solid #c4b5fd;
   font-size: 1rem;
   border-radius: 6px;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s;
 }
 
 #options-list button:hover {
@@ -114,52 +121,50 @@ button:active {
 }
 
 #options-list button.correct {
-  background-color: var(--accent);
+  background-color: var(--success);
   border-color: #22c55e;
   color: #065f46;
-  animation: pulseGreen 0.5s ease;
+  animation: pulseCorrect 0.3s ease-in-out;
 }
 
 #options-list button.incorrect {
   background-color: var(--error);
   border-color: #ef4444;
   color: #7f1d1d;
-  animation: pulseRed 0.5s ease;
+  animation: pulseWrong 0.3s ease-in-out;
 }
 
-@keyframes pulseGreen {
+@keyframes pulseCorrect {
   0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
+  50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 }
 
-@keyframes pulseRed {
+@keyframes pulseWrong {
   0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
+  50% { transform: scale(0.95); }
   100% { transform: scale(1); }
 }
 
-/* ----------------------------
-   Utility & Sections
------------------------------ */
-.hidden {
-  display: none !important;
-}
-
+/* ===================
+   Utility & Layout
+   =================== */
 .center {
   text-align: center;
   margin: 2rem 0;
-}
-
-.center button {
-  margin: 0.5rem;
-  display: inline-block;
 }
 
 .mt-2 {
   margin-top: 2rem;
 }
 
+.hidden {
+  display: none !important;
+}
+
+/* ==========================
+   Results & Explanations
+   ========================== */
 #score-text {
   font-weight: bold;
   font-size: 1.2rem;
@@ -181,45 +186,23 @@ button:active {
   border-radius: 6px;
 }
 
-/* ----------------------------
-   How-to page
------------------------------ */
-#howto-section {
-  text-align: center;
-}
-
-#howto-section ol {
-  display: inline-block;
-  text-align: left;
-  margin: 1rem auto;
-  padding-left: 20px;
-}
-
-#howto-section li {
-  margin-bottom: 8px;
-  line-height: 1.5;
-}
-
-/* ----------------------------
-   Media Queries
------------------------------ */
+/* ==========================
+   Responsive Media Queries
+   ========================== */
 @media (max-width: 40rem) {
+  nav.center button,
   .center button {
     display: block;
     width: 100%;
     margin: 0.5rem auto;
   }
-  .container {
-    padding: 1rem;
-  }
-}
 
-@media (max-width: 25rem) {
-  body {
-    font-size: 0.95rem;
+  #options-list button {
+    font-size: 1.1rem;
+    padding: 1.2rem;
   }
-  button {
-    font-size: 0.95rem;
-    padding: 0.8rem 1rem;
+
+  .logo {
+    max-width: 80px;
   }
 }
