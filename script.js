@@ -13,7 +13,75 @@ const questions = [
     answer: 1,
     explanation: "HTML stands for Hyper Text Markup Language."
   },
-  // Add remaining 9 questions as before
+  {
+    question: "Which tag is used to define a hyperlink in HTML?",
+    options: ["<a>", "<link>", "<href>", "<hyper>"],
+    answer: 0,
+    explanation: "The <a> tag defines a hyperlink in HTML."
+  },
+  {
+    question: "Which language is used for styling web pages?",
+    options: ["HTML", "Python", "CSS", "JavaScript"],
+    answer: 2,
+    explanation: "CSS (Cascading Style Sheets) is used to style HTML elements."
+  },
+  {
+    question: "Which symbol is used for comments in JavaScript?",
+    options: ["<!-- -->", "//", "/* */", "#"],
+    answer: 1,
+    explanation: "JavaScript uses // for single-line comments and /* */ for multi-line comments."
+  },
+  {
+    question: "How do you declare a variable in JavaScript?",
+    options: ["v myVar = 5;", "let myVar = 5;", "variable myVar = 5;", "dim myVar = 5;"],
+    answer: 1,
+    explanation: "You declare a variable using let, const, or var in JavaScript."
+  },
+  {
+    question: "Which method is used to add a new element at the end of an array in JavaScript?",
+    options: ["add()", "push()", "append()", "insert()"],
+    answer: 1,
+    explanation: "The push() method adds an element to the end of an array."
+  },
+  {
+    question: "What does CSS stand for?",
+    options: [
+      "Computer Style Sheets",
+      "Creative Style Syntax",
+      "Cascading Style Sheets",
+      "Colorful Style Sheets"
+    ],
+    answer: 2,
+    explanation: "CSS stands for Cascading Style Sheets."
+  },
+  {
+    question: "Which of the following is NOT a JavaScript data type?",
+    options: ["String", "Boolean", "Float", "Undefined"],
+    answer: 2,
+    explanation: "JavaScript doesn't have a 'Float' type; numbers are all of type Number."
+  },
+  {
+    question: "How can you make a website responsive?",
+    options: [
+      "Using HTML only",
+      "Using media queries in CSS",
+      "Using tables for layout",
+      "Using large images"
+    ],
+    answer: 1,
+    explanation: "Media queries in CSS help make websites responsive to different screen sizes."
+  },
+  {
+    question: "What is the purpose of JavaScript in web development?",
+    options: [
+      "To define the content",
+      "To style the content",
+      "To add interactivity",
+      "To store data in databases"
+    ],
+    answer: 2,
+    explanation: "JavaScript adds interactivity and behavior to web pages."
+  }
 ];
 
 let currentQuestionIndex = 0;
