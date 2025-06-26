@@ -18,7 +18,25 @@
   />
   <style>
     .small-logo {
-      max-width: 60px;
+      max-width: 120px; /* increased from 60px */
+    }
+    .hidden-nav {
+      display: none !important;
+    }
+    html, body {
+      height: 100%;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    footer {
+      margin-top: auto;
     }
   </style>
 </head>
@@ -45,23 +63,15 @@
         Test your knowledge of web‑development fundamentals in a fun,
         interactive quiz.
       </p>
-      <img
-        src="assets/images/illustration.png"
-        alt="Illustration of coding"
-        style="max-width: 220px; margin: 1rem 0"
-      />
       <button id="start-btn">
         <i class="fa-solid fa-circle-play"></i> Start Quiz
       </button>
     </section>
 
     <!-- Navigation bar -->
-    <nav class="center" style="margin-top: 2rem">
+    <nav class="center" id="nav-bar" style="margin-top: 2rem">
       <button id="howto-btn" aria-label="How to use the quiz">
         <i class="fa-solid fa-circle-info"></i> How To
-      </button>
-      <button id="quiz-btn" aria-label="Start the quiz">
-        <i class="fa-solid fa-play"></i> Quiz
       </button>
     </nav>
 
@@ -76,7 +86,7 @@
       <section id="howto-section" class="hidden" aria-labelledby="howto-btn">
         <h2>How to Use This Quiz</h2>
         <ol>
-          <li>Click <strong>Quiz</strong> to start.</li>
+          <li>Click <strong>Start Quiz</strong> to begin.</li>
           <li>Each question has multiple choices. Click your answer.</li>
           <li>Click <strong>Next</strong> to move to the next question.</li>
           <li>You can go back using the <strong>Back</strong> button to change an answer.</li>
@@ -119,7 +129,7 @@
     </main>
 
     <!-- Simple footer -->
-    <footer class="center" style="margin-top: 3rem; font-size: 0.875rem; color: #6b7280">
+    <footer class="center" style="font-size: 0.875rem; color: #6b7280">
       Built by Tom Herman •
       <a href="mailto:iamtomherman@gmail.com">Contact</a> •
       <a href="https://github.com/BluUsername" target="_blank">GitHub</a>
