@@ -97,13 +97,24 @@ const resultSection = document.getElementById("result-section");
 const heroSection = document.getElementById("hero-section");
 const navBar = document.getElementById("nav-bar");
 
+// Theme elements
+const themeToggle = document.getElementById("theme-toggle");
+const themeIcon = document.getElementById("theme-icon");
+const progressHeader = document.getElementById("progress-header");
+const progressContext = document.getElementById("progress-context");
+const progressPercentage = document.getElementById("progress-percentage");
+
+// Quiz elements
 const howtoBtn = document.getElementById("howto-btn");
 const howtoQuizBtn = document.getElementById("howto-quiz-btn");
 const startBtn = document.getElementById("start-btn");
 
 const questionText = document.getElementById("question-text");
-const optionsList = document.getElementById("options-list");
-const progressText = document.getElementById("progress-text");
+const optionsFieldset = document.getElementById("options-fieldset");
+const optionsContainer = document.getElementById("options-container");
+const questionLegend = document.getElementById("question-legend");
+const quizFeedback = document.getElementById("quiz-feedback");
+
 const nextBtn = document.getElementById("next-btn");
 const submitBtn = document.getElementById("submit-btn");
 const retryBtn = document.getElementById("retry-btn");
@@ -111,13 +122,98 @@ const backBtn = document.getElementById("back-btn");
 const scoreText = document.getElementById("score-text");
 const explanationsList = document.getElementById("explanations-list");
 
+// Legacy elements (for backward compatibility)
+const progressText = document.getElementById("progress-text");
+const optionsList = document.getElementById("options-list");
+
+// =========================
+// Theme Management
+// =========================
+function initializeTheme() {
+  const savedTheme = localStorage.getItem('quiz-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+  let theme;
+  if (savedTheme) {
+    theme = savedTheme;
+  } else if (prefersDark) {
+    theme = 'dark';
+  } else {
+    theme = 'light';
+  }
+  
+  setTheme(theme);
+}
+
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('quiz-theme', theme);
+  
+  // Update theme icon
+  if (theme === 'dark') {
+    themeIcon.className = 'fa-solid fa-sun';
+  } else {
+    themeIcon.className = 'fa-solid fa-moon';
+  }
+}
+
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  setTheme(newTheme);
+}
+
+// Listen for system theme changes
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+  if (!localStorage.getItem('quiz-theme')) {
+    setTheme(e.matches ? 'dark' : 'light');
+  }
+});
+
+// =========================
+// Focus Management
+// =========================
+function focusFirstOption() {
+  const firstRadio = optionsContainer.querySelector('input[type="radio"]');
+  if (firstRadio) {
+    firstRadio.focus();
+  }
+}
+
+function announceFeedback(message) {
+  quizFeedback.textContent = message;
+  // Clear after a delay to reset for next announcement
+  setTimeout(() => {
+    quizFeedback.textContent = '';
+  }, 1000);
+}
+
 // =========================
 // Progress Bar Functions
 // =========================
 function updateProgressBar() {
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-  document.getElementById("progress-bar").style.width = progress + "%";
-  progressText.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+  const progressBar = document.getElementById("progress-bar");
+  if (progressBar) {
+    progressBar.style.width = progress + "%";
+  }
+  
+  // Update progress text (legacy)
+  if (progressText) {
+    progressText.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+  }
+  
+  // Update new progress header
+  if (progressContext) {
+    progressContext.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+  }
+  if (progressPercentage) {
+    progressPercentage.textContent = Math.round(progress) + '%';
+  }
+  
+  // Announce progress for screen readers
+  const announcement = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+  announceFeedback(announcement);
 }
 
 // =========================
@@ -129,8 +225,10 @@ function showSection(section) {
 
   if (section === quizSection) {
     navBar.classList.add("hidden-nav");
+    progressHeader.classList.remove("hidden");
   } else {
     navBar.classList.remove("hidden-nav");
+    progressHeader.classList.add("hidden");
   }
 }
 
@@ -145,33 +243,79 @@ function startQuiz() {
 function displayQuestion() {
   const current = questions[currentQuestionIndex];
   questionText.textContent = current.question;
-  optionsList.innerHTML = "";
+  
+  // Update legend for screen readers
+  questionLegend.textContent = `${current.question} - Choose your answer:`;
+  
+  // Clear previous options
+  optionsContainer.innerHTML = "";
 
   current.options.forEach((option, index) => {
-    const li = document.createElement("li");
-    const btn = document.createElement("button");
-    btn.textContent = option;
-    btn.classList.add("option-btn");
-    btn.addEventListener("click", () => selectOption(index));
-
-    if (userAnswers[currentQuestionIndex] === index) {
-      btn.classList.add("selected");
-    }
-
-    li.appendChild(btn);
-    optionsList.appendChild(li);
+    // Create radio input
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = `question-${currentQuestionIndex}`;
+    input.id = `option-${currentQuestionIndex}-${index}`;
+    input.value = index;
+    input.checked = userAnswers[currentQuestionIndex] === index;
+    
+    // Create label as option card
+    const label = document.createElement("label");
+    label.classList.add("option-card");
+    label.setAttribute("for", input.id);
+    
+    // Create option content
+    const optionText = document.createElement("div");
+    optionText.classList.add("option-text");
+    
+    const optionIcon = document.createElement("div");
+    optionIcon.classList.add("option-icon");
+    
+    const textSpan = document.createElement("span");
+    textSpan.textContent = option;
+    
+    optionText.appendChild(optionIcon);
+    optionText.appendChild(textSpan);
+    
+    // Assemble the option
+    label.appendChild(input);
+    label.appendChild(optionText);
+    optionsContainer.appendChild(label);
+    
+    // Add event listener for selection
+    input.addEventListener("change", () => {
+      if (input.checked) {
+        selectOption(index);
+      }
+    });
   });
 
+  // Update navigation buttons
   backBtn.classList.toggle("hidden", currentQuestionIndex === 0);
   nextBtn.classList.toggle("hidden", currentQuestionIndex >= questions.length - 1);
   submitBtn.classList.toggle("hidden", currentQuestionIndex < questions.length - 1);
 
   updateProgressBar();
+  
+  // Focus management - focus first option after a short delay
+  setTimeout(() => {
+    focusFirstOption();
+  }, 100);
 }
 
 function selectOption(index) {
   userAnswers[currentQuestionIndex] = index;
-  displayQuestion();
+  
+  // Update the radio button
+  const radio = document.querySelector(`input[name="question-${currentQuestionIndex}"][value="${index}"]`);
+  if (radio) {
+    radio.checked = true;
+  }
+  
+  // Announce selection for screen readers
+  const current = questions[currentQuestionIndex];
+  const selectedOption = current.options[index];
+  announceFeedback(`Selected: ${selectedOption}`);
 }
 
 function showResults() {
@@ -196,6 +340,11 @@ function showResults() {
 // =========================
 // Event Listeners
 // =========================
+
+// Theme toggle
+themeToggle.addEventListener("click", toggleTheme);
+
+// Navigation
 howtoBtn.addEventListener("click", () => showSection(howtoSection));
 howtoQuizBtn.addEventListener("click", startQuiz);
 startBtn.addEventListener("click", startQuiz);
@@ -216,3 +365,51 @@ backBtn.addEventListener("click", () => {
 
 submitBtn.addEventListener("click", showResults);
 retryBtn.addEventListener("click", () => showSection(heroSection));
+
+// Keyboard shortcuts
+document.addEventListener("keydown", (e) => {
+  // Only handle shortcuts when quiz is active and not typing in inputs
+  if (!quizSection.classList.contains("hidden") && 
+      e.target.tagName !== "INPUT" && 
+      e.target.tagName !== "TEXTAREA") {
+    
+    // Handle number keys 1-4 (and potentially more)
+    const num = parseInt(e.key);
+    if (num >= 1 && num <= 4) {
+      const current = questions[currentQuestionIndex];
+      if (current && current.options[num - 1]) {
+        e.preventDefault();
+        selectOption(num - 1);
+        // Update the radio button
+        const radio = document.querySelector(`input[name="question-${currentQuestionIndex}"][value="${num - 1}"]`);
+        if (radio) {
+          radio.checked = true;
+          radio.focus();
+        }
+      }
+    }
+    
+    // Handle Enter key for Next/Submit
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (!nextBtn.classList.contains("hidden")) {
+        nextBtn.click();
+      } else if (!submitBtn.classList.contains("hidden")) {
+        submitBtn.click();
+      }
+    }
+    
+    // Handle Backspace for Back
+    if (e.key === "Backspace") {
+      e.preventDefault();
+      if (!backBtn.classList.contains("hidden")) {
+        backBtn.click();
+      }
+    }
+  }
+});
+
+// Initialize theme on page load
+document.addEventListener("DOMContentLoaded", () => {
+  initializeTheme();
+});

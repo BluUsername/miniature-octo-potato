@@ -1,14 +1,79 @@
 /* =====================
-   Global Colour Scheme
+   Global Colour Scheme & CSS Variables
    ===================== */
 :root {
+  /* Light theme colors */
   --primary: #6366f1;         /* soft indigo */
   --primary-dark: #4f46e5;    /* deeper indigo */
   --background: #f5f3ff;      /* soft lavender */
+  --surface: #ffffff;         /* white surfaces */
   --text: #1e1b4b;            /* dark indigo */
-  --white: #ffffff;
-  --success: #bbf7d0;
-  --error: #fecaca;
+  --text-muted: #4b5563;      /* gray text */
+  --success: #bbf7d0;         /* light green */
+  --success-dark: #22c55e;    /* dark green */
+  --error: #fecaca;           /* light red */
+  --error-dark: #ef4444;      /* dark red */
+  --border: #c4b5fd;          /* light purple border */
+  --border-light: #e5e7eb;    /* light gray border */
+  
+  /* Spacing scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  
+  /* Radius scale */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.05);
+  
+  /* Font sizes */
+  --font-sm: clamp(0.875rem, 2vw, 1rem);
+  --font-base: clamp(1rem, 2.5vw, 1.125rem);
+  --font-lg: clamp(1.125rem, 3vw, 1.25rem);
+  --font-xl: clamp(1.25rem, 3.5vw, 1.5rem);
+  --font-2xl: clamp(1.5rem, 4vw, 1.75rem);
+}
+
+/* Dark theme colors */
+[data-theme="dark"] {
+  --primary: #818cf8;         /* lighter indigo */
+  --primary-dark: #6366f1;    /* medium indigo */
+  --background: #1e1b4b;      /* dark indigo */
+  --surface: #312e81;         /* dark purple */
+  --text: #f8fafc;            /* near white */
+  --text-muted: #cbd5e1;      /* light gray */
+  --success: #065f46;         /* dark green */
+  --success-dark: #10b981;    /* medium green */
+  --error: #7f1d1d;           /* dark red */
+  --error-dark: #f87171;      /* medium red */
+  --border: #6366f1;          /* indigo border */
+  --border-light: #4b5563;    /* gray border */
+}
+
+/* System preference support */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --primary: #818cf8;         
+    --primary-dark: #6366f1;    
+    --background: #1e1b4b;      
+    --surface: #312e81;         
+    --text: #f8fafc;            
+    --text-muted: #cbd5e1;      
+    --success: #065f46;         
+    --success-dark: #10b981;    
+    --error: #7f1d1d;           
+    --error-dark: #f87171;      
+    --border: #6366f1;          
+    --border-light: #4b5563;    
+  }
 }
 
 /* =============
@@ -17,6 +82,7 @@
 html, body {
   height: 100%;
 }
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--background);
@@ -26,66 +92,242 @@ body {
   line-height: 1.6;
   display: flex;
   flex-direction: column;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .container {
   max-width: 800px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: var(--white);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin: var(--space-xl) auto;
+  padding: var(--space-xl);
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   flex: 1;
   display: flex;
   flex-direction: column;
+  transition: background-color 0.3s ease;
+}
+
+/* Moved from inline styles */
+.logo {
+  max-width: 120px;
+  height: auto;
+  margin-bottom: var(--space-md);
+}
+
+.hidden-nav {
+  display: none !important;
+}
+
+footer {
+  margin-top: auto;
+  padding: var(--space-md);
+  text-align: center;
+  background-color: var(--surface);
+  border-top: 1px solid var(--border-light);
+  font-size: var(--font-sm);
+  color: var(--text-muted);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Theme header */
+#theme-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-light);
+  z-index: 1000;
+  padding: var(--space-sm) var(--space-md);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.theme-header-content {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-title {
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--text);
+}
+
+#theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: var(--font-sm);
+}
+
+#theme-toggle:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+#theme-toggle:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Progress header (shown during quiz) */
+#progress-header {
+  position: fixed;
+  top: 48px;
+  left: 0;
+  right: 0;
+  background: var(--primary);
+  color: white;
+  z-index: 999;
+  padding: var(--space-sm) var(--space-md);
+  transition: background-color 0.3s ease;
+}
+
+.progress-header-content {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-sm);
+  font-weight: 500;
+}
+
+/* Adjust body padding when headers are visible */
+body:has(#progress-header:not(.hidden)) {
+  padding-top: 96px;
+}
+
+body:not(:has(#progress-header:not(.hidden))) {
+  padding-top: 48px;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 header {
   text-align: center;
+  margin-bottom: var(--space-lg);
 }
 
 .logo {
   max-width: 160px;
   height: auto;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-md);
 }
 
 h1, h2 {
   color: var(--text);
   text-align: center;
+  margin: var(--space-md) 0;
+}
+
+h1 {
+  font-size: var(--font-2xl);
+  margin-bottom: var(--space-lg);
+}
+
+h2 {
+  font-size: var(--font-xl);
+  margin-bottom: var(--space-md);
 }
 
 /* ===============
    Navigation
    =============== */
+#nav-bar {
+  margin-top: var(--space-xl);
+}
+
 nav.center button {
   margin: 0 15px;
   display: inline-block;
 }
 
+/* ===============
+   Button Styles
+   =============== */
 button {
+  font-family: inherit;
+  font-size: var(--font-base);
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  line-height: 1.2;
+}
+
+/* Primary buttons */
+button, .btn-primary {
   background-color: var(--primary);
   color: white;
-  border: none;
-  padding: 0.9rem 1.5rem;
-  font-size: 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.25s ease, transform 0.2s;
+  padding: var(--space-md) var(--space-lg);
+  border: 2px solid var(--primary);
 }
 
-button:hover {
+button:hover, .btn-primary:hover {
   background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+  transform: translateY(-1px);
 }
 
-button:focus-visible {
-  outline: 3px solid var(--primary-dark);
+/* Secondary buttons */
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text);
+  border: 2px solid var(--border);
+  padding: var(--space-md) var(--space-lg);
+}
+
+.btn-secondary:hover {
+  background-color: var(--surface);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Focus states */
+button:focus-visible, .btn-primary:focus-visible, .btn-secondary:focus-visible {
+  outline: 3px solid var(--primary);
   outline-offset: 3px;
 }
 
 button:disabled {
-  background-color: #a78bfa;
+  background-color: var(--text-muted);
   cursor: not-allowed;
+  transform: none;
 }
 
 button.nav-active {
@@ -95,14 +337,136 @@ button.nav-active {
 /* ==============
    Quiz Styles
    ============== */
+.quiz-card {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+}
+
+#quiz-feedback {
+  /* Aria-live region for screen readers */
+}
+
+#options-fieldset {
+  border: none;
+  padding: 0;
+  margin: var(--space-lg) 0;
+}
+
+#options-fieldset legend {
+  /* Screen reader only legend */
+}
+
+#options-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.option-card {
+  position: relative;
+  display: block;
+  background: linear-gradient(135deg, #ede9fe, #f3f4f6);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-size: var(--font-base);
+  text-align: left;
+}
+
+.option-card:hover {
+  background: linear-gradient(135deg, #ddd6fe, #e5e7eb);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.option-card:has(input:checked) {
+  background: linear-gradient(135deg, #c7d2fe, #dbeafe);
+  border-color: var(--primary);
+  color: #312e81;
+  box-shadow: var(--shadow-md);
+}
+
+.option-card:has(input:focus-visible) {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.option-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.option-card .option-text {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-weight: 500;
+}
+
+.option-card .option-icon {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.option-card:has(input:checked) .option-icon {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.option-card:has(input:checked) .option-icon::after {
+  content: "✓";
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Feedback states for results */
+.option-card.correct {
+  background: var(--success);
+  border-color: var(--success-dark);
+  color: #065f46;
+  animation: pulseCorrect 0.3s ease-in-out;
+}
+
+.option-card.incorrect {
+  background: var(--error);
+  border-color: var(--error-dark);
+  color: #7f1d1d;
+  animation: pulseWrong 0.3s ease-in-out;
+}
+
+.quiz-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+}
+
+/* Legacy option list styles (to be removed after JS update) */
 #options-list {
   list-style-type: none;
   padding: 0;
-  margin-top: 1.5rem;
+  margin-top: var(--space-lg);
 }
 
 #options-list li {
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-md);
 }
 
 #options-list button {
@@ -111,10 +475,10 @@ button.nav-active {
   text-align: left;
   background-color: #ede9fe;
   color: var(--text);
-  padding: 1rem;
-  border: 1px solid #c4b5fd;
-  font-size: 1rem;
-  border-radius: 6px;
+  padding: var(--space-md);
+  border: 1px solid var(--border);
+  font-size: var(--font-base);
+  border-radius: var(--radius-sm);
   transition: background-color 0.2s ease, transform 0.2s;
 }
 
@@ -130,14 +494,14 @@ button.nav-active {
 
 #options-list button.correct {
   background-color: var(--success);
-  border-color: #22c55e;
+  border-color: var(--success-dark);
   color: #065f46;
   animation: pulseCorrect 0.3s ease-in-out;
 }
 
 #options-list button.incorrect {
   background-color: var(--error);
-  border-color: #ef4444;
+  border-color: var(--error-dark);
   color: #7f1d1d;
   animation: pulseWrong 0.3s ease-in-out;
 }
@@ -159,11 +523,11 @@ button.nav-active {
    =================== */
 .center {
   text-align: center;
-  margin: 2rem 0;
+  margin: var(--space-xl) 0;
 }
 
 .mt-2 {
-  margin-top: 2rem;
+  margin-top: var(--space-xl);
 }
 
 .hidden {
@@ -175,82 +539,99 @@ button.nav-active {
    ========================== */
 #score-text {
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: var(--font-lg);
   text-align: center;
-  margin: 1rem 0;
+  margin: var(--space-md) 0;
 }
 
 #explanations-list {
   list-style-type: none;
   padding: 0;
-  margin-top: 1.5rem;
+  margin-top: var(--space-lg);
 }
 
 #explanations-list li {
-  background-color: #f9f5ff;
+  background-color: var(--surface);
+  border: 1px solid var(--border-light);
   border-left: 4px solid var(--primary);
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 6px;
+  padding: var(--space-lg);
+  margin-bottom: var(--space-md);
+  border-radius: var(--radius-md);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Progress Bar Styles */
+#progress-bar-container {
+  width: 100%;
+  height: 6px;
+  background-color: var(--border-light);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  transition: background-color 0.3s ease;
+}
+
+#progress-bar {
+  height: 100%;
+  width: 0;
+  background-color: var(--primary);
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Hero Section */
+#hero-section h2 {
+  font-size: var(--font-2xl);
+  margin-bottom: var(--space-sm);
+}
+
+#hero-section p {
+  margin-bottom: var(--space-lg);
+  font-size: var(--font-lg);
+  color: var(--text-muted);
 }
 
 /* ==========================
    Responsive Media Queries
    ========================== */
 @media (max-width: 40rem) {
+  .container {
+    margin: var(--space-md);
+    padding: var(--space-lg);
+  }
+  
+  .theme-header-content,
+  .progress-header-content {
+    padding: 0 var(--space-md);
+  }
+  
   nav.center button,
   .center button {
     display: block;
     width: 100%;
-    margin: 0.5rem auto;
+    margin: var(--space-sm) auto;
+  }
+  
+  .quiz-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .quiz-actions button {
+    width: 100%;
+    max-width: 280px;
   }
 
   #options-list button {
-    font-size: 1.1rem;
-    padding: 1.2rem;
+    font-size: var(--font-lg);
+    padding: var(--space-lg);
   }
 
   .logo {
-    max-width: 120px;
+    max-width: 100px;
   }
-}
-
-/* Progress Bar Styles */
-#progress-bar-container {
-  width: 100%;
-  height: 10px;
-  background-color: #d1d5db; /* light gray background */
-  margin-top: 10px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-}
-
-#progress-bar {
-  height: 100%;
-  width: 0;
-  background-color: #6366f1; /* soft indigo (same as button color) */
-  transition: width 0.3s ease;
-}
-
-/* Hero Section */
-#hero-section h2 {
-  font-size: 1.75rem;
-  margin-bottom: 0.5rem;
-}
-
-#hero-section p {
-  margin-bottom: 1.5rem;
-  font-size: 1.1rem;
-  color: #4b5563;
-}
-
-/* Footer */
-footer {
-  margin-top: auto;
-  padding: 1rem;
-  text-align: center;
-  background-color: var(--white);
-  border-top: 1px solid #e5e7eb;
+  
+  .option-card {
+    padding: var(--space-lg) var(--space-md);
+  }
 }
