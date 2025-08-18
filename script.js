@@ -368,9 +368,9 @@ retryBtn.addEventListener("click", () => showSection(heroSection));
 
 // Keyboard shortcuts
 document.addEventListener("keydown", (e) => {
-  // Only handle shortcuts when quiz is active and not typing in inputs
+  // Only handle shortcuts when quiz is active and not typing in text inputs
   if (!quizSection.classList.contains("hidden") && 
-      e.target.tagName !== "INPUT" && 
+      !(e.target.tagName === "INPUT" && e.target.type === "text") &&
       e.target.tagName !== "TEXTAREA") {
     
     // Handle number keys 1-4 (and potentially more)
