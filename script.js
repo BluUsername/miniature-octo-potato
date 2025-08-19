@@ -319,21 +319,50 @@ function selectOption(index) {
 }
 
 function showResults() {
-  score = userAnswers.reduce((acc, answer, i) => acc + (answer === questions[i].answer ? 1 : 0), 0);
-  scoreText.textContent = `You scored ${score} out of ${questions.length}.`;
+  score = 0;
   explanationsList.innerHTML = "";
 
   questions.forEach((q, i) => {
+    const selected = userAnswers[i] != null ? Number(userAnswers[i]) : null;
+    const correct = Number(q.answer);
+    const isCorrect = selected === correct;
+    if (isCorrect) score++;
+
     const li = document.createElement("li");
-    li.innerHTML = `
-      <p><strong>Q${i + 1}:</strong> ${q.question}</p>
-      <p><strong>Your answer:</strong> ${q.options[userAnswers[i]] ?? "No answer selected"}</p>
-      <p><strong>Correct answer:</strong> ${q.options[q.answer]}</p>
-      <p>${q.explanation}</p>
-    `;
+
+    const pQ = document.createElement("p");
+    const qStrong = document.createElement("strong");
+    qStrong.textContent = `Q${i + 1}: `;
+    pQ.appendChild(qStrong);
+    pQ.appendChild(document.createTextNode(q.question));
+    li.appendChild(pQ);
+
+    const pYour = document.createElement("p");
+    const yourStrong = document.createElement("strong");
+    yourStrong.textContent = "Your answer: ";
+    pYour.appendChild(yourStrong);
+    pYour.appendChild(
+      document.createTextNode(selected != null ? q.options[selected] : "No answer selected")
+    );
+    li.appendChild(pYour);
+
+    const pCorrect = document.createElement("p");
+    const correctStrong = document.createElement("strong");
+    correctStrong.textContent = "Correct answer: ";
+    pCorrect.appendChild(correctStrong);
+    pCorrect.appendChild(document.createTextNode(q.options[correct]));
+    li.appendChild(pCorrect);
+
+    if (q.explanation) {
+      const pExp = document.createElement("p");
+      pExp.textContent = q.explanation;
+      li.appendChild(pExp);
+    }
+
     explanationsList.appendChild(li);
   });
 
+  scoreText.textContent = `You scored ${score} out of ${questions.length}.`;
   showSection(resultSection);
 }
 
