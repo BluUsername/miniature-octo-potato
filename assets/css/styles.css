@@ -346,9 +346,7 @@ button.nav-active {
   transition: all 0.3s ease;
 }
 
-#quiz-feedback {
-  /* Aria-live region for screen readers */
-}
+/* #quiz-feedback removed: empty ruleset */
 
 #options-fieldset {
   border: none;
@@ -356,9 +354,7 @@ button.nav-active {
   margin: var(--space-lg) 0;
 }
 
-#options-fieldset legend {
-  /* Screen reader only legend */
-}
+/* Removed empty ruleset for #options-fieldset legend */
 
 #options-container {
   display: flex;
