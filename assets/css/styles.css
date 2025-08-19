@@ -816,3 +816,11 @@ button:focus-visible,
     gap: var(--space-sm);
   }
 }
+
+/* ==========================
+   Custom Styles
+   ========================== */
+
+/* Result borders for correct/incorrect answers */
+.result-correct { border-left-color: var(--success-dark) !important; }
+.result-incorrect { border-left-color: var(--error-dark) !important; }
