@@ -526,9 +526,7 @@ button.nav-active {
   margin-top: var(--space-xl);
 }
 
-.hidden {
-  display: none !important;
-}
+.hidden { display: none !important; }
 
 /* ==========================
    Results & Explanations
