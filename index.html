@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="A fun and accessible coding concepts quiz." />
+  <meta name="color-scheme" content="light dark" />
   <title>Coding Concepts Quiz</title>
 
   <!-- Core stylesheet -->
@@ -12,33 +13,9 @@
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    integrity="sha512-oyWcNJQYcbpZS+K45JAQ7s6DLuMEqN+6ey2TYtnffWqDjg5hcgEtH4qSBKxewqq+H5ySzulG3x4z6d4O1M7Ymg=="
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   />
-  <style>
-    .small-logo {
-      max-width: 120px; /* increased from 60px */
-    }
-    .hidden-nav {
-      display: none !important;
-    }
-    html, body {
-      height: 100%;
-    }
-    body {
-      display: flex;
-      flex-direction: column;
-    }
-    .container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    footer {
-      margin-top: auto;
-    }
-  </style>
 </head>
 <body>
   <!-- Progress Bar -->
@@ -46,12 +23,30 @@
     <div id="progress-bar"></div>
   </div>
 
+  <!-- Theme header -->
+  <div id="theme-header">
+    <div class="theme-header-content">
+      <span class="site-title">Coding Concepts Quiz</span>
+      <button id="theme-toggle" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-moon" id="theme-icon"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Progress header (shown during quiz) -->
+  <div id="progress-header" class="hidden">
+    <div class="progress-header-content">
+      <span id="progress-context">Question 1 of 10</span>
+      <span id="progress-percentage">10%</span>
+    </div>
+  </div>
+
   <div class="container">
     <header>
       <img
         src="assets/images/logo.png"
         alt="Coding Concepts Quiz Logo"
-        class="logo small-logo"
+        class="logo"
       />
       <h1>Coding Concepts Quiz</h1>
     </header>
@@ -69,7 +64,7 @@
     </section>
 
     <!-- Navigation bar -->
-    <nav class="center" id="nav-bar" style="margin-top: 2rem">
+    <nav class="center" id="nav-bar" >
       <button id="howto-btn" aria-label="How to use the quiz">
         <i class="fa-solid fa-circle-info"></i> How To
       </button>
@@ -87,9 +82,11 @@
         <h2>How to Use This Quiz</h2>
         <ol>
           <li>Click <strong>Start Quiz</strong> to begin.</li>
-          <li>Each question has multiple choices. Click your answer.</li>
-          <li>Click <strong>Next</strong> to move to the next question.</li>
-          <li>You can go back using the <strong>Back</strong> button to change an answer.</li>
+          <li>Each question has multiple choice radio buttons. Click your answer or use keyboard shortcuts.</li>
+          <li>Use <strong>1-4 keys</strong> to quickly select options, <strong>Enter</strong> to advance, and <strong>Backspace</strong> to go back.</li>
+          <li>Click <strong>Next</strong> to move to the next question, or use <strong>Enter</strong>.</li>
+          <li>You can go back using the <strong>Back</strong> button or <strong>Backspace</strong> to change an answer.</li>
+          <li>Toggle between <strong>Light/Dark mode</strong> using the theme button in the header.</li>
           <li>At the end, you'll see your score and explanations.</li>
         </ol>
         <div class="center">
@@ -100,19 +97,24 @@
       </section>
 
       <section id="quiz-section" class="hidden" aria-labelledby="quiz-btn">
-        <p id="progress-text" class="center" style="margin-bottom: 0.5rem"></p>
-        <h2 id="question-text"></h2>
-        <ul id="options-list"></ul>
-        <div class="center mt-2">
-          <button id="back-btn" class="hidden" aria-label="Go back to previous question">
-            <i class="fa-solid fa-arrow-left"></i> Back
-          </button>
-          <button id="next-btn" class="hidden" aria-label="Next question">
-            Next <i class="fa-solid fa-arrow-right"></i>
-          </button>
-          <button id="submit-btn" class="hidden" aria-label="Submit quiz">
-            Submit <i class="fa-solid fa-check"></i>
-          </button>
+        <div class="quiz-card">
+          <div id="quiz-feedback" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+          <h2 id="question-text"></h2>
+          <fieldset id="options-fieldset">
+            <legend class="sr-only" id="question-legend">Choose your answer:</legend>
+            <div id="options-container"></div>
+          </fieldset>
+          <div class="quiz-actions">
+            <button id="back-btn" class="btn-secondary hidden" aria-label="Go back to previous question">
+              <i class="fa-solid fa-arrow-left"></i> Back
+            </button>
+            <button id="next-btn" class="btn-primary hidden" aria-label="Next question">
+              Next <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <button id="submit-btn" class="btn-primary hidden" aria-label="Submit quiz">
+              Submit <i class="fa-solid fa-check"></i>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -129,7 +131,7 @@
     </main>
 
     <!-- Simple footer -->
-    <footer class="center" style="font-size: 0.875rem; color: #6b7280">
+    <footer class="center" >
       Built by Tom Herman •
       <a href="mailto:iamtomherman@gmail.com">Contact</a> •
       <a href="https://github.com/BluUsername" target="_blank">GitHub</a>
