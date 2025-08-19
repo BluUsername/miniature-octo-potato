@@ -284,9 +284,8 @@ function displayQuestion() {
     
     // Add event listener for selection
     input.addEventListener("change", () => {
-      if (input.checked) {
-        selectOption(index);
-      }
+      userAnswers[currentQuestionIndex] = Number(input.value); // ensure number
+      updateNavState();
     });
   });
 
@@ -319,13 +318,14 @@ function selectOption(index) {
 }
 
 function showResults() {
-  // Recompute score and render results safely (no innerHTML)
+  // If you store strings from radios, coerce to numbers here
   score = 0;
   explanationsList.innerHTML = "";
 
   questions.forEach((q, i) => {
-    const selected = userAnswers[i];
-    const isCorrect = selected === q.answer;
+    const selected = userAnswers[i] != null ? Number(userAnswers[i]) : null;
+    const correct = Number(q.answer);
+    const isCorrect = selected === correct;
     if (isCorrect) score++;
 
     const li = document.createElement("li");
@@ -354,7 +354,7 @@ function showResults() {
     const correctStrong = document.createElement("strong");
     correctStrong.textContent = "Correct answer: ";
     pCorrect.appendChild(correctStrong);
-    pCorrect.appendChild(document.createTextNode(q.options[q.answer]));
+    pCorrect.appendChild(document.createTextNode(q.options[correct]));
     li.appendChild(pCorrect);
 
     // Explanation
