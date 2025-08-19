@@ -635,3 +635,190 @@ button.nav-active {
     padding: var(--space-lg) var(--space-md);
   }
 }
+
+/* =========================
+   Compact visual scale overrides
+   Paste at end of file
+   ========================= */
+
+/* Smaller type + tighter spacing + subtler radius/shadows */
+:root {
+  /* Typography */
+  --font-sm: clamp(0.8125rem, 1.6vw, 0.9375rem);
+  --font-base: clamp(0.9375rem, 2vw, 1rem);
+  --font-lg: clamp(1rem, 2.2vw, 1.125rem);
+  --font-xl: clamp(1.125rem, 2.6vw, 1.25rem);
+  --font-2xl: clamp(1.25rem, 3vw, 1.375rem);
+
+  /* Spacing */
+  --space-xs: 0.125rem;
+  --space-sm: 0.375rem;
+  --space-md: 0.75rem;
+  --space-lg: 1rem;
+  --space-xl: 1.25rem;
+  --space-2xl: 2rem;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  /* Shadows (more subtle) */
+  --shadow-sm: 0 1px 1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Layout + headings */
+.container {
+  max-width: 720px;
+  padding: var(--space-lg);
+  margin: var(--space-lg) auto;
+}
+.logo { max-width: 96px; margin-bottom: var(--space-sm); }
+h1 { font-size: var(--font-xl); margin-bottom: var(--space-md); }
+h2 { font-size: var(--font-lg); margin: var(--space-sm) 0 var(--space-md); }
+
+/* Buttons: smaller, tighter */
+button, .btn-primary {
+  font-size: var(--font-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+}
+.btn-secondary {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+}
+
+/* Quiz card + options: slimmer */
+.quiz-card {
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+#options-container { gap: var(--space-sm); }
+.option-card {
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  transform: none;
+}
+.option-card:hover { transform: translateY(-1px); }
+.option-card .option-icon { width: 16px; height: 16px; }
+
+/* Progress + headers: slimmer bars and spacing */
+#progress-bar-container { height: 6px; }
+#theme-header { padding: var(--space-xs) var(--space-sm); }
+#progress-header { top: 40px; padding: var(--space-xs) var(--space-sm); }
+.progress-header-content { font-size: var(--font-sm); }
+body:has(#progress-header:not(.hidden)) { padding-top: 80px; }
+body:not(:has(#progress-header:not(.hidden))) { padding-top: 40px; }
+
+/* Focus outline: a bit thinner but still visible */
+button:focus-visible,
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.option-card:has(input:focus-visible) {
+  outline-width: 2px;
+}
+
+/* Dark mode readability for option cards (solid surfaces, high contrast) */
+[data-theme="dark"] .option-card {
+  background: var(--surface);
+  border-color: var(--border-light);
+  color: var(--text);
+}
+[data-theme="dark"] .option-card:hover {
+  background: #2b2a6a; /* slightly lighter than --surface */
+  border-color: var(--primary);
+}
+[data-theme="dark"] .option-card:has(input:checked) {
+  background: #3a39a0; /* indigo tint with good contrast */
+  border-color: var(--primary);
+  color: #fff;
+}
+
+/* =========================
+   Results: compact & readable
+   ========================= */
+
+/* Tighter score heading */
+#score-text {
+  font-size: var(--font-base);
+  margin: var(--space-sm) 0 var(--space-md);
+}
+
+/* Grid layout for explanations: fits more per page */
+#explanations-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+  list-style: none;
+  padding: 0;
+}
+
+/* Card: slimmer padding, tighter spacing */
+#explanations-list li {
+  padding: var(--space-md);
+  margin: 0; /* grid handles spacing */
+  border-left: 3px solid var(--primary);
+  border-radius: var(--radius-md);
+}
+
+/* Tight vertical rhythm inside each card */
+#explanations-list li > * { margin: 0; }
+#explanations-list li > * + * { margin-top: var(--space-sm); }
+
+/* Typography: smaller, denser for readability */
+#explanations-list li h3,
+#explanations-list li h4 {
+  font-size: var(--font-base);
+  line-height: 1.35;
+}
+
+#explanations-list li p,
+#explanations-list li ul,
+#explanations-list li ol {
+  font-size: var(--font-sm);
+  line-height: 1.45;
+}
+
+#explanations-list li ul,
+#explanations-list li ol {
+  padding-left: 1.1rem;
+}
+
+/* Inline and block code: compact and readable */
+#explanations-list li code {
+  background: rgba(99, 102, 241, 0.12);
+  padding: 0 .25rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+#explanations-list li pre {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm);
+  font-size: var(--font-sm);
+  line-height: 1.4;
+  overflow: auto;
+}
+
+/* Dark theme code contrast */
+[data-theme="dark"] #explanations-list li code {
+  background: rgba(129, 140, 248, 0.18);
+}
+[data-theme="dark"] #explanations-list li pre {
+  background: #26245e;
+  border-color: #3b3a7a;
+}
+
+/* Extra-compact on very wide screens */
+@media (min-width: 80rem) {
+  #explanations-list {
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: var(--space-sm);
+  }
+}
