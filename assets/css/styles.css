@@ -738,6 +738,19 @@ button:focus-visible,
    Results: compact & readable
    ========================= */
 
+/* Ensure page content clears fixed header and progress bar on all viewports */
+.container {
+  /* provide a safe top offset to avoid clipping under fixed headers */
+  margin-top: 64px;
+}
+
+@media (max-width: 40rem) {
+  /* smaller offset for mobile where headers are slimmer */
+  .container {
+    margin-top: 56px;
+  }
+}
+
 /* Tighter score heading */
 #score-text {
   font-size: var(--font-base);
