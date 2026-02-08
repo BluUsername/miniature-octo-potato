@@ -81,6 +81,7 @@
    ============= */
 html, body {
   height: 100%;
+  overscroll-behavior: none;
 }
 
 body {
@@ -93,6 +94,8 @@ body {
   display: flex;
   flex-direction: column;
   transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+  position: relative;
 }
 
 /* Reduced motion support */
@@ -115,6 +118,7 @@ body {
   display: flex;
   flex-direction: column;
   transition: background-color 0.3s ease;
+  overscroll-behavior: contain;
 }
 
 /* Moved from inline styles */
@@ -136,19 +140,6 @@ footer {
   border-top: 1px solid var(--border-light);
   font-size: var(--font-sm);
   color: var(--text-muted);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-/* Theme header */
-#theme-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border-light);
-  z-index: 1000;
-  padding: var(--space-sm) var(--space-md);
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -213,11 +204,11 @@ footer {
 
 /* Adjust body padding when headers are visible */
 body:has(#progress-header:not(.hidden)) {
-  padding-top: 96px;
+  padding-top: 102px;
 }
 
 body:not(:has(#progress-header:not(.hidden))) {
-  padding-top: 48px;
+  padding-top: 54px;
 }
 
 /* Screen reader only content */
@@ -562,7 +553,7 @@ button.nav-active {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1001;
+  z-index: 2000;
   transition: background-color 0.3s ease;
 }
 
@@ -571,6 +562,19 @@ button.nav-active {
   width: 0;
   background-color: var(--primary);
   transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Theme header - adjust for progress bar */
+#theme-header {
+  position: fixed;
+  top: 6px;
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-light);
+  z-index: 1999;
+  padding: var(--space-sm) var(--space-md);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Hero Section */
@@ -701,11 +705,10 @@ button, .btn-primary {
 
 /* Progress + headers: slimmer bars and spacing */
 #progress-bar-container { height: 6px; }
-#theme-header { padding: var(--space-xs) var(--space-sm); }
-#progress-header { top: 40px; padding: var(--space-xs) var(--space-sm); }
+#progress-header { top: 46px; padding: var(--space-xs) var(--space-sm); }
 .progress-header-content { font-size: var(--font-sm); }
-body:has(#progress-header:not(.hidden)) { padding-top: 80px; }
-body:not(:has(#progress-header:not(.hidden))) { padding-top: 40px; }
+body:has(#progress-header:not(.hidden)) { padding-top: 86px; }
+body:not(:has(#progress-header:not(.hidden))) { padding-top: 46px; }
 
 /* Focus outline: a bit thinner but still visible */
 button:focus-visible,
