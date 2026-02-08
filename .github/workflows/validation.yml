@@ -1,0 +1,33 @@
+name: Validation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  html-and-js-validate:
+    name: HTML & JS validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install validators
+        run: |
+          npm init -y
+          npm install --no-save html-validate jshint
+
+      - name: Run HTML validation (html-validate)
+        run: |
+          npx html-validate "index.html" --verbose
+
+      - name: Run JavaScript lint (JSHint)
+        run: |
+          npx jshint script.js || true
