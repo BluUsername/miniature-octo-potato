@@ -816,3 +816,183 @@ button:focus-visible,
     gap: var(--space-sm);
   }
 }
+
+/* =====================
+   Responsive Design - Media Queries
+   ===================== */
+
+/* Mobile devices (up to 640px) */
+@media (max-width: 640px) {
+  body {
+    padding: 0;
+  }
+  
+  .container {
+    margin: var(--space-md) auto;
+    padding: var(--space-md);
+    max-width: 100%;
+    border-radius: 0;
+  }
+  
+  header {
+    flex-direction: column;
+  }
+  
+  .logo {
+    max-width: 80px;
+  }
+  
+  h1 {
+    font-size: var(--font-xl);
+  }
+  
+  #theme-header {
+    padding: var(--space-md);
+  }
+  
+  .theme-header-content {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  
+  .site-title {
+    font-size: var(--font-base);
+  }
+  
+  #progress-header {
+    padding: var(--space-sm);
+  }
+  
+  .progress-header-content {
+    flex-direction: column;
+    gap: var(--space-xs);
+    font-size: var(--font-sm);
+  }
+  
+  .option-card {
+    padding: var(--space-md);
+  }
+  
+  button {
+    padding: var(--space-md);
+    font-size: var(--font-sm);
+  }
+  
+  .quiz-card {
+    padding: var(--space-md);
+  }
+  
+  #explanations-list {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+  
+  footer {
+    padding: var(--space-sm);
+    font-size: var(--font-sm);
+  }
+}
+
+/* Tablets (641px to 1024px) */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .container {
+    max-width: 90%;
+    margin: var(--space-lg) auto;
+    padding: var(--space-lg);
+  }
+  
+  header {
+    flex-direction: row;
+  }
+  
+  .logo {
+    max-width: 100px;
+  }
+  
+  h1 {
+    font-size: var(--font-xl);
+  }
+  
+  .theme-header-content {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .progress-header-content {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--space-md);
+  }
+  
+  .option-card {
+    padding: var(--space-lg);
+  }
+  
+  button {
+    padding: var(--space-md) var(--space-lg);
+    font-size: var(--font-base);
+  }
+  
+  .quiz-card {
+    padding: var(--space-lg);
+  }
+  
+  #explanations-list {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-lg);
+  }
+}
+
+/* Large screens (1025px and up) */
+@media (min-width: 1025px) {
+  .container {
+    max-width: 900px;
+    margin: var(--space-2xl) auto;
+    padding: var(--space-2xl);
+  }
+  
+  header {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+  
+  .logo {
+    max-width: 120px;
+  }
+  
+  h1 {
+    font-size: var(--font-2xl);
+  }
+  
+  .theme-header-content {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-xl);
+  }
+  
+  .progress-header-content {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    padding: var(--space-md) var(--space-xl);
+  }
+  
+  .option-card {
+    padding: var(--space-lg);
+  }
+  
+  button {
+    padding: var(--space-md) var(--space-xl);
+    font-size: var(--font-base);
+  }
+  
+  .quiz-card {
+    padding: var(--space-2xl);
+  }
+  
+  #explanations-list {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--space-2xl);
+  }
+}
