@@ -1,0 +1,20 @@
+{
+  "name": "miniature-octo-potato",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "html-validate": "^7.9.0",
+    "jshint": "^2.13.5",
+    "eslint": "^8.50.0",
+    "stylelint": "^15.10.0",
+    "stylelint-config-standard": "^30.0.0",
+    "prettier": "^2.8.8"
+  },
+  "scripts": {
+    "lint:html": "html-validate \"index.html\"",
+    "lint:js": "jshint script.js && eslint script.js || true",
+    "lint:css": "stylelint \"assets/css/**/*.css\" || true",
+    "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
+    "format": "prettier --write \"**/*.{js,css,html,json,md}\""
+  }
+}

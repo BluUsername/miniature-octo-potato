@@ -19,15 +19,11 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install validators
+      - name: Install dependencies
         run: |
-          npm init -y
-          npm install --no-save html-validate jshint
+          npm ci --no-audit --prefer-offline || true
+          npm install --no-save
 
-      - name: Run HTML validation (html-validate)
+      - name: Run all linters (npm script)
         run: |
-          npx html-validate "index.html" --verbose
-
-      - name: Run JavaScript lint (JSHint)
-        run: |
-          npx jshint script.js || true
+          npm run lint
