@@ -122,7 +122,6 @@ const howtoQuizBtn = document.getElementById("howto-quiz-btn");
 const startBtn = document.getElementById("start-btn");
 
 const questionText = document.getElementById("question-text");
-const optionsFieldset = document.getElementById("options-fieldset");
 const optionsContainer = document.getElementById("options-container");
 const questionLegend = document.getElementById("question-legend");
 const quizFeedback = document.getElementById("quiz-feedback");
@@ -136,7 +135,6 @@ const explanationsList = document.getElementById("explanations-list");
 
 // Legacy elements (for backward compatibility)
 const progressText = document.getElementById("progress-text");
-const optionsList = document.getElementById("options-list");
 
 // =========================
 // Theme Management
