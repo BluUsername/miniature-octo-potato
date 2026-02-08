@@ -1,5 +1,8 @@
 # Coding Concepts Quiz
 
+![Validation](https://github.com/BluUsername/miniature-octo-potato/actions/workflows/validation.yml/badge.svg)
+![Pages](https://github.com/BluUsername/miniature-octo-potato/actions/workflows/deploy-pages.yml/badge.svg)
+
 ## Project Overview and Value
 
 **Coding Concepts Quiz** is an interactive web application designed to help users test and reinforce their understanding of core programming concepts. Built with custom **HTML**, **CSS**, and **JavaScript**, this project demonstrates:
@@ -15,6 +18,14 @@
 - **Mobile-Friendly**: Works seamlessly across desktop, tablet, and mobile devices.
 
 This project is an excellent learning tool for beginners or anyone revising coding fundamentals.
+
+---
+
+## 🌐 Live Demo
+
+**[Try the Quiz Now →](https://BluUsername.github.io/miniature-octo-potato/)**
+
+The application is deployed and ready to use. Simply visit the link above to start the quiz!
 
 ---
 
