@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="A fun and accessible coding concepts quiz." />
-  <meta name="color-scheme" content="light dark" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A fun and accessible coding concepts quiz.">
+  <meta name="color-scheme" content="light dark">
   <title>Coding Concepts Quiz</title>
 
   <!-- Core stylesheet -->
-  <link rel="stylesheet" href="assets/css/styles.css?v=3" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=3">
   <!-- Font Awesome for icons -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
-  />
+  >
 </head>
 <body>
   <!-- Progress Bar -->
@@ -26,7 +26,7 @@
   <!-- Theme header -->
   <div id="theme-header">
     <div class="theme-header-content">
-      <button id="theme-toggle" aria-label="Toggle dark mode">
+      <button type="button" id="theme-toggle" aria-label="Toggle dark mode">
         <i class="fa-solid fa-moon" id="theme-icon"></i>
       </button>
     </div>
@@ -46,7 +46,7 @@
         src="assets/images/logo.png"
         alt="Coding Concepts Quiz Logo"
         class="logo"
-      />
+      >
     </header>
 
     <!-- Hero Section -->
@@ -56,14 +56,14 @@
         Test your knowledge of web‑development fundamentals in a fun,
         interactive quiz.
       </p>
-      <button id="start-btn">
+      <button type="button" id="start-btn">
         <i class="fa-solid fa-circle-play"></i> Start Quiz
       </button>
     </section>
 
     <!-- Navigation bar -->
     <nav class="center" id="nav-bar" >
-      <button id="howto-btn" aria-label="How to use the quiz">
+      <button type="button" id="howto-btn" aria-label="How to use the quiz">
         <i class="fa-solid fa-circle-info"></i> How To
       </button>
     </nav>
@@ -88,7 +88,7 @@
           <li>At the end, you'll see your score and explanations.</li>
         </ol>
         <div class="center">
-          <button id="howto-quiz-btn">
+          <button type="button" id="howto-quiz-btn">
             <i class="fa-solid fa-play"></i> Start Quiz
           </button>
         </div>
@@ -97,19 +97,19 @@
       <section id="quiz-section" class="hidden" aria-labelledby="quiz-btn">
         <div class="quiz-card">
           <div id="quiz-feedback" aria-live="polite" aria-atomic="true" class="sr-only"></div>
-          <h2 id="question-text"></h2>
+          <h2 id="question-text">Question</h2>
           <fieldset id="options-fieldset">
             <legend class="sr-only" id="question-legend">Choose your answer:</legend>
             <div id="options-container"></div>
           </fieldset>
           <div class="quiz-actions">
-            <button id="back-btn" class="btn-secondary hidden" aria-label="Go back to previous question">
+            <button type="button" id="back-btn" class="btn-secondary hidden" aria-label="Go back to previous question">
               <i class="fa-solid fa-arrow-left"></i> Back
             </button>
-            <button id="next-btn" class="btn-primary hidden" aria-label="Next question">
+            <button type="button" id="next-btn" class="btn-primary hidden" aria-label="Next question">
               Next <i class="fa-solid fa-arrow-right"></i>
             </button>
-            <button id="submit-btn" class="btn-primary hidden" aria-label="Submit quiz">
+            <button type="button" id="submit-btn" class="btn-primary hidden" aria-label="Submit quiz">
               Submit <i class="fa-solid fa-check"></i>
             </button>
           </div>
@@ -121,7 +121,7 @@
         <p id="score-text"></p>
         <ul id="explanations-list"></ul>
         <div class="center">
-          <button id="retry-btn" aria-label="Retake the quiz">
+          <button type="button" id="retry-btn" aria-label="Retake the quiz">
             <i class="fa-solid fa-rotate-right"></i> Retake Quiz
           </button>
         </div>
